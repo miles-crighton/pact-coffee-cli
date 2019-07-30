@@ -1,0 +1,17 @@
+{
+  "name": "pact-headless",
+  "version": "1.0.0",
+  "description": "A headless actor for authenticating and navigating pact.co.uk",
+  "main": "main.js",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "got": "^9.6.0",
+    "puppeteer": "^1.19.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
