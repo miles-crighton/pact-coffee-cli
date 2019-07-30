@@ -34,7 +34,7 @@ const getData = async function(authID) {
     } else {
         console.log('Unable to retrieve data')
     }
-}
+};
 
 const changeDate = async function(authID, orderID, date) {
     const headers = { Authorization: `Basic ${authID}` }
@@ -46,13 +46,13 @@ const changeDate = async function(authID, orderID, date) {
     } else {
         console.log('Unable to change date')
     }
-}
+};
 
 const toBASE64 = function(str) {
     return Buffer.from(str).toString('base64') + '=='
 };
 
-(async () => {
+async function main() {
     try {
         const tokenDecimal = await authenticate()
         const tokenBASE64 = toBASE64(tokenDecimal)
@@ -71,4 +71,6 @@ const toBASE64 = function(str) {
         console.log(error);
         //=> 'Internal server error ...'
     }
-})();
+};
+
+main();
