@@ -27,20 +27,25 @@ const deauthenticate = async function(authID) {
 
 const getData = async function(authID) {
     const headers = { Authorization: `Basic ${authID}` }
-    const response = await got('https://api.pactcoffee.com/v1/tokens/me', { headers })
-    if (response.statusCode === 201) {
+    const response = await got('https://api.pactcoffee.com/v1/users/me/start', { headers })
+    if (response.statusCode === 200) {
         console.log('Data retrieved: ', response.body)
-        return response.body
+        return JSON.parse(response.body)
     } else {
-        console.log('Unable to deauthenticate')
+        console.log('Unable to retrieve data')
     }
 }
 
 const changeDate = async function(authID, orderID, date) {
     const headers = { Authorization: `Basic ${authID}` }
     //TODO: veryify date format
-    const options = { headers, json: true, body: date }
+    const options = { headers, json: true, body: { dispatch_on: date } }
     const response = await got.patch(`https://api.pactcoffee.com/v1/users/me/orders/${orderID}/`, options)
+    if (response.statusCode === 200) {
+        console.log(`Date successfully changed to ${date}`)
+    } else {
+        console.log('Unable to change date')
+    }
 }
 
 const toBASE64 = function(str) {
@@ -54,9 +59,11 @@ const toBASE64 = function(str) {
 
         //Get info
         const data = await getData(tokenBASE64)
+        const order = data.start.order_ids[0]
+        console.log(order)
 
-        // const date = '2019-07-31'
-        // await changeDate(tokenBASE64, )
+        const date = '2019-08-01'
+        await changeDate(tokenBASE64, order, date)
 
         deauthenticate(tokenBASE64)
         //=> '<!doctype html> ...'
