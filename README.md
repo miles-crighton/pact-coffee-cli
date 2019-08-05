@@ -6,8 +6,6 @@ Send POST request to:
 https://api.pactcoffee.com/v1/tokens
 w/ payload of {email, password}
 
-{"email":"milessayshi@hotmail.co.uk","password":"9NefyX7#I7zr"}
-
 returns:
 {
     "token": {
@@ -46,3 +44,9 @@ On change date:
 Send PATCH request to:
 https://api.pactcoffee.com/v1/users/me/orders/<order-id>/
 w/ payload of { dispatch_on: 2019-07-30 } (YYYY-MM-DD)
+
+## Todo
+
+[ ] - Deauthenticate on error
+[ ] - Prevent dispatch date being a weekend
+[ ] - Create API for different actions (ASAP dispatch, Select date, Select coffee)
