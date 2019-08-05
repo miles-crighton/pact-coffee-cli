@@ -3,7 +3,7 @@ const got = require('got');
 
 const CREDS = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_PASSWORD };
 
-const authenticate = async function () {
+async function authenticate() {
     const response = await got.post('https://api.pactcoffee.com/v1/tokens/', { json: true, body: CREDS });
     if (response.statusCode === 201) { 
         const tokenID = response.body.token.id
@@ -14,7 +14,7 @@ const authenticate = async function () {
     }
 };
 
-const deauthenticate = async function(authID) {
+async function deauthenticate(authID) {
     //Id is base64
     const headers = { Authorization: `Basic ${authID}` }
     const response = await got.delete('https://api.pactcoffee.com/v1/tokens/me', { headers })
@@ -25,7 +25,7 @@ const deauthenticate = async function(authID) {
     }
 };
 
-const getData = async function(authID) {
+async function getData(authID) {
     const headers = { Authorization: `Basic ${authID}` }
     const response = await got('https://api.pactcoffee.com/v1/users/me/start', { headers })
     if (response.statusCode === 200) {
@@ -36,7 +36,7 @@ const getData = async function(authID) {
     }
 };
 
-const changeDate = async function(authID, orderID, date) {
+async function changeDate(authID, orderID, date) {
     const headers = { Authorization: `Basic ${authID}` }
     //TODO: veryify date format
     const options = { headers, json: true, body: { dispatch_on: date } }
@@ -48,7 +48,7 @@ const changeDate = async function(authID, orderID, date) {
     }
 };
 
-const toBASE64 = function(str) {
+function toBASE64(str) {
     return Buffer.from(str).toString('base64') + '=='
 };
 
@@ -62,7 +62,7 @@ async function main() {
         const order = data.start.order_ids[0]
         console.log(order)
 
-        const date = '2019-08-01'
+        const date = '2019-08-20'
         await changeDate(tokenBASE64, order, date)
 
         deauthenticate(tokenBASE64)
