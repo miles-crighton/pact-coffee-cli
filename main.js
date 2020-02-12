@@ -9,8 +9,8 @@ const CREDS = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_
 async function authenticate() {
     const response = await got.post('https://api.pactcoffee.com/v1/tokens/', { json: true, body: CREDS });
     if (response.statusCode === 201) { 
-        const tokenID = response.body.token.id
-        console.log('\nAuthentication successful.')
+        const tokenID = response.body.token.id;
+        console.log(chalk.green('\nAuthentication successful. 👍'));
         return tokenID
     } else {
         throw Error('Authentication unsuccessful')
@@ -22,9 +22,9 @@ async function deauthenticate(authID) {
     const headers = { Authorization: `Basic ${authID}` }
     const response = await got.delete('https://api.pactcoffee.com/v1/tokens/me', { headers })
     if (response.statusCode === 204) {
-        console.log('Deauthentication successful')
+        console.log(chalk.green('Deauthentication successful. 👍'));
     } else {
-        console.log('Unable to deauthenticate')
+        console.log(chalk.red('Unable to deauthenticate. 👎'));
     }
 };
 
@@ -35,7 +35,7 @@ async function getData(authID) {
         //console.log('Data retrieved: ', response.body)
         return JSON.parse(response.body)
     } else {
-        console.log('Unable to retrieve data')
+        console.log(chalk.red('Unable to retrieve data'));
     }
 };
 
@@ -55,17 +55,21 @@ function toBASE64(str) {
     return Buffer.from(str).toString('base64') + '=='
 };
 
+function displayHeader() {
+    clear();
+    console.log(
+        chalk.yellow(
+            figlet.textSync('Pact CLI', { horizontalLayout: 'full' })
+        )
+    );
+}
+
 const CLI = require('clui');
 const Spinner = CLI.Spinner;
 
 async function main() {
     try {
-        clear();
-        console.log(
-            chalk.yellow(
-                figlet.textSync('Pact CLI', { horizontalLayout: 'full' })
-            )
-        );
+        displayHeader()
 
         const status = new Spinner('Authenticating you, please wait... ☕');
         status.start();
@@ -75,10 +79,12 @@ async function main() {
 
         status.stop();
 
+        displayHeader()
+
         //Get info
         const data = await getData(tokenBASE64);
         const order = data.start.order_ids[0];
-        console.log('Recieved order id', order);
+        console.log(chalk.yellow('Recieved order id', order));
 
         // const date = '2020-03-20'
         // await changeDate(tokenBASE64, order, date)
