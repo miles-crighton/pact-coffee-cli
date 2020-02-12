@@ -1,7 +1,10 @@
+
+## API Investigation
 Most HTTP requests are after an initial OPTIONS request to get endpoint HTTP options
 
-written in Ruby
+Backend written in Ruby
 
+### Authentication
 Send POST request to:
 https://api.pactcoffee.com/v1/tokens
 w/ payload of {email, password}
@@ -28,17 +31,21 @@ NB: SENDS TOKEN ENCODED IN BASE64 with == end padding
 
 Returns all the data!
 
+### Logging out
 
-ON LOG OUT
 Send DELETE request to 
 https://api.pactcoffee.com/v1/tokens/me
 w/ Authorization header
 when logging out
 
+### Skipping order
+
 On SKIP:
 Send PATCH request to:
 https://api.pactcoffee.com/v1/users/me/orders/<order-id>/skip
 w/ empty payload: {}
+
+### Changing order date
 
 On change date:
 Send PATCH request to:
@@ -48,5 +55,5 @@ w/ payload of { dispatch_on: 2019-07-30 } (YYYY-MM-DD)
 ## Todo
 
 [ ] - Deauthenticate on error
-[ ] - Prevent dispatch date being a weekend
+[ ] - Prevent dispatch date being a weekend (causes error)
 [ ] - Create API for different actions (ASAP dispatch, Select date, Select coffee)
