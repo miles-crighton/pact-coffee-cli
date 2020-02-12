@@ -64,6 +64,21 @@ function displayHeader() {
     );
 }
 
+function reverseDate(date, delimiter='-') {
+    const dateArray = date.split('-');
+    return dateArray[2] + delimiter + dateArray[1] + delimiter + dateArray[0]
+}
+
+function displayOrderStatus(orderData) {
+    const coffeeName = orderData.entities[0].name;
+    const dispatchDate = orderData.orders[0].dispatch_on;
+    console.log(chalk.yellow('Your order of'),
+        chalk.red(coffeeName),
+        chalk.yellow('will be dispatched on'),
+        chalk.red(reverseDate(dispatchDate, '/'))
+    );
+}
+
 const CLI = require('clui');
 const Spinner = CLI.Spinner;
 
@@ -79,22 +94,17 @@ async function main() {
         status.stop();
 
         displayHeader()
-        console.log(chalk.green('\nAuthentication successful. 👍'));
+        console.log(chalk.green('Authentication successful. 👍'));
 
         //Get info
         const data = await getData(tokenBASE64);
-        const order = data.start.order_ids[0];
+        const orderID = data.start.order_ids[0];
         //console.log(data)
-        const coffeeName = data.entities[0].name;
-        const dispatchDate = data.orders[0].dispatch_on;
-        console.log(chalk.yellow('Your order of'), 
-                    chalk.red(coffeeName), 
-                    chalk.yellow('will be dispatched on'),
-                    chalk.red(dispatchDate) 
-                   );
+        displayOrderStatus(data)
+
 
         // const date = '2020-03-20'
-        // await changeDate(tokenBASE64, order, date)
+        // await changeDate(tokenBASE64, orderID, date)
 
         deauthenticate(tokenBASE64);
         //=> '<!doctype html> ...'
