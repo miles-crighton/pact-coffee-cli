@@ -72,19 +72,26 @@ async function main() {
         displayHeader()
 
         const status = new Spinner('Authenticating you, please wait... ☕');
+
         status.start();
-        
         const tokenDecimal = await authenticate();
         const tokenBASE64 = toBASE64(tokenDecimal);
-
         status.stop();
 
         displayHeader()
+        console.log(chalk.green('\nAuthentication successful. 👍'));
 
         //Get info
         const data = await getData(tokenBASE64);
         const order = data.start.order_ids[0];
-        console.log(chalk.yellow('Recieved order id', order));
+        //console.log(data)
+        const coffeeName = data.entities[0].name;
+        const dispatchDate = data.orders[0].dispatch_on;
+        console.log(chalk.yellow('Your order of'), 
+                    chalk.red(coffeeName), 
+                    chalk.yellow('will be dispatched on'),
+                    chalk.red(dispatchDate) 
+                   );
 
         // const date = '2020-03-20'
         // await changeDate(tokenBASE64, order, date)
