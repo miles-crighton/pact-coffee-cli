@@ -26,7 +26,6 @@ module.exports = {
     getData: async (authID) => {
         const headers = { Authorization: `Basic ${authID}` };
         const response = await got('https://api.pactcoffee.com/v1/users/me/start', { headers })
-        console.log(response.body)
         if (response.statusCode === 200) {
             //console.log('Data retrieved: ', response.body)
             return JSON.parse(response.body)

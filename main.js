@@ -55,7 +55,7 @@ async function main() {
         //Get info
         const data = await apiComms.getData(tokenBASE64);
         const orderID = data.start.order_ids[0];
-        console.log(data)
+        //console.log(data)
         displayOrderStatus(data)
 
         const answers = await inquirer.askOptions();
