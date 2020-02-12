@@ -64,9 +64,9 @@ function displayHeader() {
     );
 }
 
-function reverseDate(date, delimiter='-') {
-    const dateArray = date.split('-');
-    return dateArray[2] + delimiter + dateArray[1] + delimiter + dateArray[0]
+function reverseDate(date, oldDelimiter='-', newDelimiter='-') {
+    const dateArray = date.split(oldDelimiter);
+    return dateArray[2] + newDelimiter + dateArray[1] + newDelimiter + dateArray[0]
 }
 
 function displayOrderStatus(orderData) {
@@ -75,9 +75,19 @@ function displayOrderStatus(orderData) {
     console.log(chalk.yellow('Your order of'),
         chalk.red(coffeeName),
         chalk.yellow('will be dispatched on'),
-        chalk.red(reverseDate(dispatchDate, '/'))
+        chalk.red(reverseDate(dispatchDate, '-', '/'))
     );
 }
+
+const inquirer = require('./inquirer');
+
+const getNewDate = async () => {
+    const date = await inquirer.askOptions();
+    console.log(date);
+    //console.log(reverseDate(date.Date, '/', '-'))
+};
+
+getNewDate()
 
 const CLI = require('clui');
 const Spinner = CLI.Spinner;
@@ -114,4 +124,4 @@ async function main() {
     }
 };
 
-main();
+//main();
