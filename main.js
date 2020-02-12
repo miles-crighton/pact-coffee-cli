@@ -2,6 +2,13 @@ require('dotenv').config()
 const chalk = require('chalk');
 const clear = require('clear');
 const figlet = require('figlet');
+const CLI = require('clui');
+
+const inquirer = require('./inquirer');
+const apiComms = require('./apiComms');
+
+const Spinner = CLI.Spinner;
+
 
 function toBASE64(str) {
     return Buffer.from(str).toString('base64') + '=='
@@ -31,21 +38,6 @@ function displayOrderStatus(orderData) {
     );
 }
 
-const inquirer = require('./inquirer');
-
-// const getNewDate = async () => {
-//     const date = await inquirer.askOptions();
-//     console.log(date);
-//     //console.log(reverseDate(date.Date, '/', '-'))
-// };
-
-// getNewDate()
-
-const CLI = require('clui');
-const Spinner = CLI.Spinner;
-
-const apiComms = require('./apiComms');
-
 async function main() {
     try {
         displayHeader()
@@ -67,17 +59,11 @@ async function main() {
         displayOrderStatus(data)
 
         const answers = await inquirer.askOptions();
-        console.log(answers)
-
-        // const date = '2020-03-20'
         if (answers.date) await apiComms.changeDate(tokenBASE64, orderID, reverseDate(answers.date,'/','-'))
-        // 
 
         apiComms.deauthenticate(tokenBASE64);
-        //=> '<!doctype html> ...'
     } catch (error) {
         console.log(error);
-        //=> 'Internal server error ...'
     }
 };
 

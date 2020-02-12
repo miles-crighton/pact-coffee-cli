@@ -1,13 +1,13 @@
 const inquirer = require('inquirer');
 
 module.exports = {
-    askOptions: (coffeeTypes = ['To be added', 'To be added']) => {
+    askOptions: (coffeeTypes = []) => {
         const questions = [
             {
                 name: 'optionSelection',
                 type: 'list',
                 message: 'Select an action:',
-                choices: ['Change delivery date', 'Change coffee type', 'Cancel action']
+                choices: ['Change delivery date', 'Cancel action']
             },
             {
                 name: 'date',
