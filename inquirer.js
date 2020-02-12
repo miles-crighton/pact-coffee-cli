@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 
 module.exports = {
-    askOptions: () => {
+    askOptions: (coffeeTypes = ['To be added', 'To be added']) => {
         const questions = [
             {
                 name: 'optionSelection',
@@ -10,7 +10,7 @@ module.exports = {
                 choices: ['Change delivery date', 'Change coffee type']
             },
             {
-                name: 'Date',
+                name: 'date',
                 type: 'input',
                 message: 'Enter a new delivery date:',
                 when: function(answers) {
@@ -24,6 +24,15 @@ module.exports = {
                     }
                 }
             },
+            {
+                name: 'coffeeType',
+                type: 'list',
+                message: 'Select a new coffee:',
+                choices: coffeeTypes,
+                when: function(answers) {
+                    return answers.optionSelected === 'Change coffee type'
+                } 
+            }
         ];
         return inquirer.prompt(questions)
     },
