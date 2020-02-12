@@ -15,7 +15,7 @@ module.exports = {
     },
     deauthenticate: async (authID) => {
         //Id is base64
-        const headers = { Authorization: `Basic ${authID}` }
+        const headers = { Authorization: `Basic ${authID}` };
         const response = await got.delete('https://api.pactcoffee.com/v1/tokens/me', { headers })
         if (response.statusCode === 204) {
             console.log(chalk.green('Deauthentication successful. 👍'));
@@ -24,8 +24,9 @@ module.exports = {
         }
     },
     getData: async (authID) => {
-        const headers = { Authorization: `Basic ${authID}` }
+        const headers = { Authorization: `Basic ${authID}` };
         const response = await got('https://api.pactcoffee.com/v1/users/me/start', { headers })
+        console.log(response.body)
         if (response.statusCode === 200) {
             //console.log('Data retrieved: ', response.body)
             return JSON.parse(response.body)
@@ -38,7 +39,7 @@ module.exports = {
             console.log(chalk.red('Date format incorrect, dispatch date unchanged'));
             return
         }
-        const headers = { Authorization: `Basic ${authID}` }
+        const headers = { Authorization: `Basic ${authID}` };
 
         const options = { headers, json: true, body: { order_id: orderID, dispatch_on: date } }
         const response = await got.patch(`https://api.pactcoffee.com/v1/users/me/orders/${orderID}/`, options)
@@ -46,6 +47,17 @@ module.exports = {
             console.log(`Date successfully changed to ${date}`)
         } else {
             console.log('Unable to change date')
+        }
+    },
+    changeCoffee: async (authID, orderId, coffee) => {
+        const headers = { Authorization: `Basic ${authID}` };
+        //TODO: get correct data to fill the body
+        const options = { headers, json: true, body: { order_item: null, entities: [{}] } }
+        const response = await got.patch(`https://api.pactcoffee.com/v1/users/me/orders/${orderID}/items/${coffeeID}`, options)
+        if (response.statusCode === 200) {
+            console.log(chalk.green(`Date successfully changed to ${date}`));
+        } else {
+            console.log(chalk.red('Unable to change date'));
         }
     }
 };
