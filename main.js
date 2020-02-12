@@ -67,7 +67,7 @@ async function main() {
             )
         );
 
-        const status = new Spinner('Authenticating you, please wait...');
+        const status = new Spinner('Authenticating you, please wait... ☕');
         status.start();
         
         const tokenDecimal = await authenticate();
