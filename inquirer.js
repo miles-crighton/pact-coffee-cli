@@ -7,7 +7,7 @@ module.exports = {
                 name: 'optionSelection',
                 type: 'list',
                 message: 'Select an action:',
-                choices: ['Change delivery date', 'Change coffee type']
+                choices: ['Change delivery date', 'Change coffee type', 'Cancel action']
             },
             {
                 name: 'date',
