@@ -1,10 +1,7 @@
 require('dotenv').config()
-const got = require('got');
 const chalk = require('chalk');
 const clear = require('clear');
 const figlet = require('figlet');
-
-const CREDS = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_PASSWORD };
 
 function toBASE64(str) {
     return Buffer.from(str).toString('base64') + '=='
@@ -14,7 +11,7 @@ function displayHeader() {
     clear();
     console.log(
         chalk.yellow(
-            figlet.textSync('Pact CLI', { horizontalLayout: 'full' })
+            figlet.textSync('Pact CLI', { horizontalLayout: 'fitted' })
         )
     );
 }
@@ -34,7 +31,7 @@ function displayOrderStatus(orderData) {
     );
 }
 
-// const inquirer = require('./inquirer');
+const inquirer = require('./inquirer');
 
 // const getNewDate = async () => {
 //     const date = await inquirer.askOptions();
@@ -69,9 +66,12 @@ async function main() {
         //console.log(data)
         displayOrderStatus(data)
 
+        const answers = await inquirer.askOptions();
+        console.log(answers)
 
         // const date = '2020-03-20'
-        // await changeDate(tokenBASE64, orderID, date)
+        if (answers.date) await apiComms.changeDate(tokenBASE64, orderID, reverseDate(answers.date,'/','-'))
+        // 
 
         apiComms.deauthenticate(tokenBASE64);
         //=> '<!doctype html> ...'

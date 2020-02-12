@@ -34,8 +34,12 @@ module.exports = {
         }
     },
     changeDate: async (authID, orderID, date) => {
+        if (!checkDateFormat(date)) {
+            console.log(chalk.red('Date format incorrect, dispatch date unchanged'));
+            return
+        }
         const headers = { Authorization: `Basic ${authID}` }
-        //TODO: veryify date format
+
         const options = { headers, json: true, body: { dispatch_on: date } }
         const response = await got.patch(`https://api.pactcoffee.com/v1/users/me/orders/${orderID}/`, options)
         if (response.statusCode === 200) {
@@ -45,3 +49,8 @@ module.exports = {
         }
     }
 };
+
+checkDateFormat = (date) => {
+    const regex = /\d{4}-\d{2}-\d{2}/g;
+    return regex.test(date)
+}
