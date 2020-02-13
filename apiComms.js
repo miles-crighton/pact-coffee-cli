@@ -4,21 +4,17 @@ const CLI = require('clui');
 const inquirer = require('./inquirer');
 const fs = require('fs') 
 const envfile = require('envfile');
-const sourcePath = '.env'
 
 const Spinner = CLI.Spinner;
 
 module.exports = {
     authenticate: async () => {
-        let credentials = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_PASSWORD };
-        if (!credentials.email || !credentials.password) {
-            credentials = await inquirer.askPactCredentials();
-            writeEnvFile(credentials.email, credentials.password);
-        }
-        const status = new Spinner('Authenticating you, please wait... ☕');
-        status.start();
-        const response = await got.post('https://api.pactcoffee.com/v1/tokens/', { json: true, body: credentials });
-        status.stop();
+        const credentials = checkCredentials();
+
+        const response = await statusWrapper(
+            got.post, ['https://api.pactcoffee.com/v1/tokens/', { json: true, body: credentials }]
+        );
+
         if (response.statusCode === 201) {
             const tokenID = response.body.token.id;
             console.log(chalk.green('\nAuthentication successful.'));
@@ -77,6 +73,14 @@ checkDateFormat = (date) => {
     return regex.test(date)
 }
 
+statusWrapper = async (func, args) => {
+    const status = new Spinner('Authenticating you, please wait... ☕');
+    status.start();
+    const response = await func(...args)
+    status.stop();
+    return response;
+}
+
 getData = async (authID, type) => {
     const headers = { Authorization: `Basic ${authID}` };
     const urls = { 
@@ -98,8 +102,19 @@ getData = async (authID, type) => {
     }
 }
 
+checkCredentials = () => {
+    let credentials = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_PASSWORD };
+    if (!credentials.email || !credentials.password) {
+        credentials = inquirer.askPactCredentials();
+        writeEnvFile(credentials.email, credentials.password);
+    }
+    return credentials
+}
+
 writeEnvFile = (email, password) => {
-    let parsedFile = envfile.parseFileSync(sourcePath);
-    parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password }
-    fs.writeFileSync('./.env', envfile.stringifySync(parsedFile)) 
+    parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password };
+    fs.writeFile('./.env', envfile.stringifySync(parsedFile), function (err) {
+        if (err) throw err;
+        console.log(chalk.green('Credentials saved successfully.'));
+    });
 }
