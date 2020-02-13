@@ -33,7 +33,7 @@ function displayOrderStatus(orderData) {
     const dispatchDate = orderData.orders[0].dispatch_on;
     console.log(chalk.yellow('Your order of'),
         chalk.red(coffeeName),
-        chalk.yellow('will be dispatched on'),
+        chalk.yellow('☕ will be dispatched on'),
         chalk.red(reverseDate(dispatchDate, '-', '/'))
     );
 }
@@ -54,7 +54,8 @@ async function main() {
 
         //Get info
         const userData = await apiComms.getUserData(tokenBASE64);
-        console.log(userData)
+        const coffeeData = await apiComms.getCoffeeData(tokenBASE64)
+        const available = filterAvailableCoffees(coffeeData)
         const orderID = userData.start.order_ids[0];
         //console.log(data)
         displayOrderStatus(userData)
@@ -69,3 +70,16 @@ async function main() {
 };
 
 main();
+
+filterAvailableCoffees = (coffeeData) => {
+    /**
+     * @param {array} coffeeData        List of coffee objects
+     * @return {array} availableCoffees  List of available coffees
+     */
+    console.log(coffeeData.length)
+    let availableCoffees = coffeeData.filter((value) => {
+        return value.can_purchase && value.promoted
+    });
+    console.log(availableCoffees.length)
+    return availableCoffees
+}

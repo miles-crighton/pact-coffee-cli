@@ -76,7 +76,7 @@ getData = async (authID, type) => {
 
     const response = await got(urls[type], { headers })
     if (response.statusCode === 200) {
-        console.log('Data retrieved: ', response.body)
+        //console.log('Data retrieved: ', response.body)
         return JSON.parse(response.body)
     } else {
         console.log(chalk.red(`Unable to retrieve ${type} data`));
