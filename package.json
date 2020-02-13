@@ -13,11 +13,12 @@
     "inquirer": "^7.0.4"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "mocha": "^7.0.1"
   },
   "scripts": {
     "start": "node main.js",
-    "test": ""
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC"
