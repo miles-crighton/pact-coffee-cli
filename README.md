@@ -1,68 +1,27 @@
+# Pact Coffee CLI
 
-## API Investigation
-Most HTTP requests are after an initial OPTIONS request to get endpoint HTTP options
+A fan-made project to allow command-line communications with Pact's servers.
 
-Backend written in Ruby
+Currently, it provides functionality to view the status of a order, as well
+as the ability to change the dispatch date of that order.
 
-### Authentication
-Send POST request to:
-https://api.pactcoffee.com/v1/tokens
-w/ payload of {email, password}
+## To run locally
 
-returns:
-{
-    "token": {
-        "id": "a5cdc2e4-69c9-4c9d-8a20-e793cde7a689"
-    }
-}
+Clone the repository into a local directory:
+`git clone https://github.com/miles-crighton/<TBC>`
 
-THEN
+Install required npm packages:
+`npm install`
 
-Uses token based authentication
->> Returns JSON web token on credentials post
->> token has expiration
->> can be deleted manually by website also (HTTP DELETE)
+Run the script with:
+`node pactCLI.js`
 
-Sends GET to:
-https://api.pactcoffee.com/v1/users/me/start
-w/ authorization header
-Authorization: Basic <tokenID: base64>== 
-NB: SENDS TOKEN ENCODED IN BASE64 with == end padding
+### Optional: create bash alias (OSX/Unix Bash Users)
+Run this command from the project directory:
+`echo "alias pact='node "$PWD"/pactCLI.js'" >> ~/.bash_profile`
 
-Returns all the data!
-
-### Logging out
-
-Send DELETE request to 
-https://api.pactcoffee.com/v1/tokens/me
-w/ Authorization header
-when logging out
-
-### Skipping order
-
-On SKIP:
-Send PATCH request to:
-https://api.pactcoffee.com/v1/users/me/orders/<order-id>/skip
-w/ empty payload: {}
-
-### Changing order date
-
-On change date:
-Send PATCH request to:
-https://api.pactcoffee.com/v1/users/me/orders/<order-id>/
-w/ payload of { dispatch_on: 2019-07-30 } (YYYY-MM-DD)
-
-### Get list of products
-
-Send GET to:
-https://api.pactcoffee.com/v2/products
-w/ Authorization header
-
-### Get list of plans
-
-Send GET to:
-https://api.pactcoffee.com/v2/plans
-w/ Authorization header
+You should now be able to run the program simply using:
+`pact`
 
 ## Todo
 

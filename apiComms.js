@@ -9,7 +9,7 @@ const Spinner = CLI.Spinner;
 
 module.exports = {
     authenticate: async () => {
-        const credentials = checkCredentials();
+        const credentials = await checkCredentials();
 
         const response = await statusWrapper(
             got.post, ['https://api.pactcoffee.com/v1/tokens/', { json: true, body: credentials }]
@@ -102,10 +102,10 @@ getData = async (authID, type) => {
     }
 }
 
-checkCredentials = () => {
+checkCredentials = async () => {
     let credentials = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_PASSWORD };
     if (!credentials.email || !credentials.password) {
-        credentials = inquirer.askPactCredentials();
+        credentials = await inquirer.askPactCredentials();
         writeEnvFile(credentials.email, credentials.password);
     }
     return credentials
