@@ -58,6 +58,12 @@ Send GET to:
 https://api.pactcoffee.com/v2/products
 w/ Authorization header
 
+### Get list of plans
+
+Send GET to:
+https://api.pactcoffee.com/v2/plans
+w/ Authorization header
+
 ## Todo
 
 [ ] - Deauthenticate on error

@@ -44,11 +44,12 @@ module.exports = {
             console.log(chalk.red('Unable to change date'));
         }
     },
-    changeCoffee: async (authID, orderId, coffee) => {
+    changeCoffee: async (authID, orderId, item, coffee) => {
         const headers = { Authorization: `Basic ${authID}` };
         //TODO: get correct data to fill the body
+        //Change { sku, extended_sku, product_name }
         const options = { headers, json: true, body: { order_item: null, entities: [{}] } }
-        const response = await got.patch(`https://api.pactcoffee.com/v1/users/me/orders/${orderID}/items/${coffeeID}`, options)
+        const response = await got.patch(`https://api.pactcoffee.com/v1/users/me/orders/${orderID}/items/${item.id}`, options)
         if (response.statusCode === 200) {
             console.log(chalk.green(`Date successfully changed to ${date}`));
         } else {
@@ -66,7 +67,7 @@ getData = async (authID, type) => {
     const headers = { Authorization: `Basic ${authID}` };
     const urls = { 
         user: 'https://api.pactcoffee.com/v1/users/me/start',
-        coffee: 'https://api.pactcoffee.com/v2/products'
+        coffee: 'https://api.pactcoffee.com/v2/products/'
     };
 
     if (!(type in urls)) {
@@ -76,7 +77,7 @@ getData = async (authID, type) => {
 
     const response = await got(urls[type], { headers })
     if (response.statusCode === 200) {
-        //console.log('Data retrieved: ', response.body)
+        //console.log('Data retrieved: ', JSON.parse(response.body))
         return JSON.parse(response.body)
     } else {
         console.log(chalk.red(`Unable to retrieve ${type} data`));

@@ -52,16 +52,15 @@ async function main() {
         displayHeader()
         console.log(chalk.green('Authentication successful. 👍'));
 
-        //Get info
         const userData = await apiComms.getUserData(tokenBASE64);
-        const coffeeData = await apiComms.getCoffeeData(tokenBASE64)
-        const available = filterAvailableCoffees(coffeeData)
+        //const coffeeData = await apiComms.getCoffeeData(tokenBASE64)
+        //const available = filterAvailableCoffees(coffeeData)
         const orderID = userData.start.order_ids[0];
-        //console.log(data)
         displayOrderStatus(userData)
 
         const answers = await inquirer.askOptions();
         if (answers.date) await apiComms.changeDate(tokenBASE64, orderID, reverseDate(answers.date,'/','-'))
+        //if (answers.coffee) await apiComms.changeCoffee(tokenBASE64, orderID, item, answers.coffee)
 
         apiComms.deauthenticate(tokenBASE64);
     } catch (error) {
@@ -78,8 +77,10 @@ filterAvailableCoffees = (coffeeData) => {
      */
     console.log(coffeeData.length)
     let availableCoffees = coffeeData.filter((value) => {
-        return value.can_purchase && value.promoted
+        return value.can_purchase && value.product_type === 'bag' && value.pioneer_price === '7.95'
     });
+
+    console.log(availableCoffees)
     console.log(availableCoffees.length)
     return availableCoffees
 }
