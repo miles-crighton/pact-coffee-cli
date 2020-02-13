@@ -8,7 +8,9 @@
     "clear": "^0.1.0",
     "clui": "^0.3.6",
     "dotenv": "^8.0.0",
+    "envfile": "^4.5.0",
     "figlet": "^1.2.4",
+    "fs": "0.0.1-security",
     "got": "^9.6.0",
     "inquirer": "^7.0.4"
   },

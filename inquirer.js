@@ -36,4 +36,33 @@ module.exports = {
         ];
         return inquirer.prompt(questions)
     },
+    askPactCredentials: () => {
+        const questions = [
+            {
+                name: 'email',
+                type: 'input',
+                message: 'Please enter your Pact email:',
+                validate: function (value) {
+                    if (value.length) {
+                        return true;
+                    } else {
+                        return 'Please enter a valid email:'
+                    }
+                }
+            },
+            {
+                name: 'password',
+                type: 'password',
+                messsage: 'Please enter your Pact password',
+                validate: function (value) {
+                    if (value.length) {
+                        return true;
+                    } else {
+                        return 'Please enter a valid password:'
+                    }
+                }
+            }
+        ]
+        return inquirer.prompt(questions)
+    }
 };

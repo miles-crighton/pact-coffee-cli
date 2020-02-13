@@ -1,13 +1,27 @@
 const got = require('got');
 const chalk = require('chalk');
-const CREDS = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_PASSWORD };
+const CLI = require('clui');
+const inquirer = require('./inquirer');
+const fs = require('fs') 
+const envfile = require('envfile');
+const sourcePath = '.env'
+
+const Spinner = CLI.Spinner;
 
 module.exports = {
     authenticate: async () => {
-        const response = await got.post('https://api.pactcoffee.com/v1/tokens/', { json: true, body: CREDS });
+        let credentials = { "email": process.env.CREDS_EMAIL, "password": process.env.CREDS_PASSWORD };
+        if (!credentials.email || !credentials.password) {
+            credentials = await inquirer.askPactCredentials();
+            writeEnvFile(credentials.email, credentials.password);
+        }
+        const status = new Spinner('Authenticating you, please wait... ☕');
+        status.start();
+        const response = await got.post('https://api.pactcoffee.com/v1/tokens/', { json: true, body: credentials });
+        status.stop();
         if (response.statusCode === 201) {
             const tokenID = response.body.token.id;
-            console.log(chalk.green('\nAuthentication successful. 👍'));
+            console.log(chalk.green('\nAuthentication successful.'));
             return tokenID
         } else {
             throw Error('Authentication unsuccessful')
@@ -18,9 +32,9 @@ module.exports = {
         const headers = { Authorization: `Basic ${authID}` };
         const response = await got.delete('https://api.pactcoffee.com/v1/tokens/me', { headers })
         if (response.statusCode === 204) {
-            console.log(chalk.green('Deauthentication successful. 👍'));
+            console.log(chalk.green('Deauthentication successful.'));
         } else {
-            console.log(chalk.red('Unable to deauthenticate. 👎'));
+            console.log(chalk.red('Unable to deauthenticate.'));
         }
     },
     getUserData: async (authID) => {
@@ -82,4 +96,10 @@ getData = async (authID, type) => {
     } else {
         console.log(chalk.red(`Unable to retrieve ${type} data`));
     }
+}
+
+writeEnvFile = (email, password) => {
+    let parsedFile = envfile.parseFileSync(sourcePath);
+    parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password }
+    fs.writeFileSync('./.env', envfile.stringifySync(parsedFile)) 
 }
