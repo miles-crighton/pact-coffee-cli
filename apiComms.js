@@ -23,15 +23,11 @@ module.exports = {
             console.log(chalk.red('Unable to deauthenticate. 👎'));
         }
     },
-    getData: async (authID) => {
-        const headers = { Authorization: `Basic ${authID}` };
-        const response = await got('https://api.pactcoffee.com/v1/users/me/start', { headers })
-        if (response.statusCode === 200) {
-            //console.log('Data retrieved: ', response.body)
-            return JSON.parse(response.body)
-        } else {
-            console.log(chalk.red('Unable to retrieve data'));
-        }
+    getUserData: async (authID) => {
+        return getData(authID, type='user')
+    },
+    getCoffeeData: async (authID) => {
+        return getData(authID, type='coffee')
     },
     changeDate: async (authID, orderID, date) => {
         if (!checkDateFormat(date)) {
@@ -64,4 +60,25 @@ module.exports = {
 checkDateFormat = (date) => {
     const regex = /\d{4}-\d{2}-\d{2}/g;
     return regex.test(date)
+}
+
+getData = async (authID, type) => {
+    const headers = { Authorization: `Basic ${authID}` };
+    const urls = { 
+        user: 'https://api.pactcoffee.com/v1/users/me/start',
+        coffee: 'https://api.pactcoffee.com/v2/products'
+    };
+
+    if (!(type in urls)) {
+        console.log(chalk.red(`Invalid data request type: ${type}`)); 
+        return
+    }
+
+    const response = await got(urls[type], { headers })
+    if (response.statusCode === 200) {
+        console.log('Data retrieved: ', response.body)
+        return JSON.parse(response.body)
+    } else {
+        console.log(chalk.red(`Unable to retrieve ${type} data`));
+    }
 }

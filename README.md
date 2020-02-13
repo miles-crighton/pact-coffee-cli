@@ -52,6 +52,12 @@ Send PATCH request to:
 https://api.pactcoffee.com/v1/users/me/orders/<order-id>/
 w/ payload of { dispatch_on: 2019-07-30 } (YYYY-MM-DD)
 
+### Get list of products
+
+Send GET to:
+https://api.pactcoffee.com/v2/products
+w/ Authorization header
+
 ## Todo
 
 [ ] - Deauthenticate on error

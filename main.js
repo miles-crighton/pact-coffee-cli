@@ -53,10 +53,11 @@ async function main() {
         console.log(chalk.green('Authentication successful. 👍'));
 
         //Get info
-        const data = await apiComms.getData(tokenBASE64);
-        const orderID = data.start.order_ids[0];
+        const userData = await apiComms.getUserData(tokenBASE64);
+        console.log(userData)
+        const orderID = userData.start.order_ids[0];
         //console.log(data)
-        displayOrderStatus(data)
+        displayOrderStatus(userData)
 
         const answers = await inquirer.askOptions();
         if (answers.date) await apiComms.changeDate(tokenBASE64, orderID, reverseDate(answers.date,'/','-'))
