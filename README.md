@@ -41,3 +41,11 @@ pact
 - [ ] Deauthenticate on error
 - [ ] Prevent dispatch date being a weekend (causes error)
 - [ ] Create API for additional actions (ASAP dispatch, Select coffee)
+
+## Tech used
+* Node.js
+    * Got
+    * Chalk
+    * Inquirer
+    * Figlet
+    * Chai & Mocha
