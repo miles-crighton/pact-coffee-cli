@@ -1,5 +1,7 @@
 # Pact Coffee CLI
 
+![Screenshot of software](/screenshot.png?raw=true "Main CLI")
+
 A fan-made project to allow command-line communications with Pact's servers.
 
 Current functionality:
