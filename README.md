@@ -2,8 +2,9 @@
 
 A fan-made project to allow command-line communications with Pact's servers.
 
-Currently, it provides functionality to view the status of a order, as well
-as the ability to change the dispatch date of that order.
+Current functionality:
+* view the status of an order
+* change the dispatch date of that order.
 
 ## To run locally
 
@@ -35,6 +36,6 @@ pact
 
 ## Todo
 
-[ ] - Deauthenticate on error
-[ ] - Prevent dispatch date being a weekend (causes error)
-[ ] - Create API for different actions (ASAP dispatch, Select date, Select coffee)
+- [ ] Deauthenticate on error
+- [ ] Prevent dispatch date being a weekend (causes error)
+- [ ] Create API for additional actions (ASAP dispatch, Select coffee)
