@@ -7,6 +7,7 @@ A fan-made project to allow command-line communications with Pact's servers.
 Current functionality:
 * view the status of an order
 * change the dispatch date of that order.
+    * Can use full date (DD-MM-YYY) or shorthand (4d/1w) representing days and weeks from the present date.
 
 ## To run locally
 
