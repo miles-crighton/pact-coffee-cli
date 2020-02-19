@@ -17,10 +17,10 @@ module.exports = {
                     return answers.optionSelection === 'Change delivery date'
                 },
                 validate: function (value) {
-                    if (value.length) {
+                    if (validateNewDate(value)) {
                         return true;
                     } else {
-                        return 'Enter a new delivery date:';
+                        return 'Unable to read date format, please try again:';
                     }
                 }
             },
@@ -66,3 +66,9 @@ module.exports = {
         return inquirer.prompt(questions)
     }
 };
+
+const validateNewDate = (date) => {
+    const regexDate = /^\d{2}\/\d{2}\/\d{4}$/g;
+    const regexShorthand = /^\d{1,2}[dw]$/g;
+    return regexDate.test(date) || regexShorthand.test(date)
+}

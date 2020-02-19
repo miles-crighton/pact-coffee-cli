@@ -14,6 +14,36 @@ module.exports = {
             )
         );
     },
+    handleDateInput: (dateInput) => {
+        const regexDate = /^\d{2}\/\d{2}\/\d{4}$/g;
+        const regexShorthand = /^\d{1,2}[dw]$/g;
+
+        if (regexDate.test(dateInput)) {
+            return module.exports.reverseDate(dateInput, '/', '-');
+        };
+        if (regexShorthand.test(dateInput)) {
+            return module.exports.convertShorthandDate(dateInput)
+        };
+        throw Error('Unexpected date format');
+    },
+    convertShorthandDate: (dateInput) => {
+        let quantity = parseInt(dateInput.match(/\d+/g)[0]);
+        const increment = dateInput.match(/[dw]/g)[0];
+        const dispatchDate = new Date();
+
+        //If requested increment is in weeks
+        if (increment === 'w') { quantity *= 7; };
+
+        dispatchDate.setDate(dispatchDate.getDate() + quantity);
+        return module.exports.formatDateObj(dispatchDate)
+    },
+    formatDateObj: (dateObj) => {
+        const dd = ('0' + dateObj.getDate()).slice(-2);
+        const mm = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+        const y = dateObj.getFullYear();
+
+        return formattedDate = y + '-' + mm + '-' + dd;
+    },
     reverseDate: (date, oldDelimiter = '-', newDelimiter = '-') => {
         const dateArray = date.split(oldDelimiter);
         return dateArray[2] + newDelimiter + dateArray[1] + newDelimiter + dateArray[0]

@@ -24,7 +24,10 @@ async function main() {
         helpers.displayOrderStatus(userData)
 
         const answers = await inquirer.askOptions();
-        if (answers.date) await apiComms.changeDate(tokenBASE64, orderID, helpers.reverseDate(answers.date,'/','-'));
+        if (answers.date) {
+            const requestedDate = helpers.handleDateInput(answers.date);
+            await apiComms.changeDate(tokenBASE64, orderID, requestedDate);
+        }
         //if (answers.coffee) await apiComms.changeCoffee(tokenBASE64, orderID, item, answers.coffee)
 
         apiComms.deauthenticate(tokenBASE64);
@@ -34,4 +37,6 @@ async function main() {
 };
 
 main();
+
+
 

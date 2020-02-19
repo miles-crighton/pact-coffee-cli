@@ -18,4 +18,9 @@ describe('Helper Functions', function () {
                 'MmYxMTRhMTUtMWZkZS00MDRhLWI0ODEtMmFkYjA2NzQ5YmFh==');
         });
     });
+    // describe('#handleDateInput()', function () {
+    //     it('should return date 20 days ahead with 20d input', function() {
+    //         assert.equal(helpers.handleDateInput('20d'), '20d')
+    //     });
+    // });
 });

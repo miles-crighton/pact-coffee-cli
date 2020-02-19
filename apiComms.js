@@ -49,7 +49,7 @@ module.exports = {
         const options = { headers, json: true, body: { order_id: orderID, dispatch_on: date } }
         const response = await got.patch(`https://api.pactcoffee.com/v1/users/me/orders/${orderID}/`, options)
         if (response.statusCode === 200) {
-            console.log(chalk.green(`Date successfully changed to ${date}`));
+            console.log(chalk.green(`Order dispatch date successfully changed to ${date}. 👍`));
         } else {
             console.log(chalk.red('Unable to change date'));
         }
