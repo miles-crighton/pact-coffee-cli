@@ -67,8 +67,21 @@ module.exports = {
     }
 };
 
+
+
 const validateNewDate = (date) => {
     const regexDate = /^\d{2}\/\d{2}\/\d{4}$/g;
     const regexShorthand = /^\d{1,2}[dw]$/g;
-    return regexDate.test(date) || regexShorthand.test(date)
-}
+    Date.prototype.isValid = function () {
+        // An invalid date object returns NaN for getTime() and NaN is the only
+        // object not strictly equal to itself.
+        return this.getTime() === this.getTime();
+    };  
+
+    if (regexDate.test(date)) {
+        let dateSplit = date.split('/');
+        d = new Date(dateSplit[1] + '/' + dateSplit[0] + '/' + dateSplit[2]);
+        return d.isValid()
+    }
+    return regexShorthand.test(date)
+};

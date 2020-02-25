@@ -17,25 +17,35 @@ module.exports = {
     handleDateInput: (dateInput) => {
         const regexDate = /^\d{2}\/\d{2}\/\d{4}$/g;
         const regexShorthand = /^\d{1,2}[dw]$/g;
+        let dispatchDateObj;
 
         if (regexDate.test(dateInput)) {
-            return module.exports.reverseDate(dateInput, '/', '-');
+            dispatchDateObj = module.exports.convertFullDate(dateInput)
+        } else if (regexShorthand.test(dateInput)) {
+            dispatchDateObj = module.exports.convertShorthandDate(dateInput)
+        } else {
+            throw Error('Unexpected date format');
         };
-        if (regexShorthand.test(dateInput)) {
-            return module.exports.convertShorthandDate(dateInput)
-        };
-        throw Error('Unexpected date format');
+
+        dispatchDateObj = module.exports.handleWeekend(dispatchDateObj);
+
+        return module.exports.formatDateObj(dispatchDateObj)
+    },
+    convertFullDate: (dateInput) => {
+        const dateSplit = dateInput.split('/');
+        const dateObj = new Date(dateSplit[1] + '/' + dateSplit[0] + '/' + dateSplit[2]);
+        return dateObj
     },
     convertShorthandDate: (dateInput) => {
         let quantity = parseInt(dateInput.match(/\d+/g)[0]);
         const increment = dateInput.match(/[dw]/g)[0];
-        const dispatchDate = new Date();
+        const dispatchDateObj = new Date();
 
-        //If requested increment is in weeks
+        //Requested increment is in weeks
         if (increment === 'w') { quantity *= 7; };
+        dispatchDateObj.setDate(dispatchDateObj.getDate() + quantity);
 
-        dispatchDate.setDate(dispatchDate.getDate() + quantity);
-        return module.exports.formatDateObj(dispatchDate)
+        return dispatchDateObj
     },
     formatDateObj: (dateObj) => {
         const dd = ('0' + dateObj.getDate()).slice(-2);
@@ -43,6 +53,18 @@ module.exports = {
         const y = dateObj.getFullYear();
 
         return formattedDate = y + '-' + mm + '-' + dd;
+    },
+    handleWeekend: (dateObj) => {
+        let quantity = 0;
+        const copiedDateObj = new Date(dateObj.getTime());
+        //getDay returns day of the week 0-6 (sat-sun)
+        switch (copiedDateObj.getDay()) {
+            case 0: quantity++; break;
+            case 6: quantity--; break;
+        }
+        if (quantity !== 0) { console.log(chalk.red('Requested date was a weekend, adjusting dispatch date.')) };
+        copiedDateObj.setDate(copiedDateObj.getDate() + quantity);
+        return copiedDateObj
     },
     reverseDate: (date, oldDelimiter = '-', newDelimiter = '-') => {
         const dateArray = date.split(oldDelimiter);
