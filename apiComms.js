@@ -113,7 +113,7 @@ checkCredentials = async () => {
 
 writeEnvFile = (email, password) => {
     parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password };
-    fs.writeFile('./.env', envfile.stringifySync(parsedFile), function (err) {
+    fs.writeFile('__dirname/.env', envfile.stringifySync(parsedFile), function (err) {
         if (err) throw err;
         console.log(chalk.green('Credentials saved successfully.'));
     });
