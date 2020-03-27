@@ -1,27 +1,27 @@
 {
-  "name": "pact-coffee-cli",
-  "version": "1.0.0",
-  "description": "A CLI for interacting with Pact coffee",
-  "main": "main.js",
-  "dependencies": {
-    "chalk": "^3.0.0",
-    "clear": "^0.1.0",
-    "clui": "^0.3.6",
-    "dotenv": "^8.0.0",
-    "envfile": "^4.5.0",
-    "figlet": "^1.2.4",
-    "fs": "0.0.1-security",
-    "got": "^9.6.0",
-    "inquirer": "^7.0.4"
-  },
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^7.0.1"
-  },
-  "scripts": {
-    "start": "node pactCLI.js",
-    "test": "mocha"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "pact-coffee-cli",
+    "version": "1.0.0",
+    "description": "A CLI for interacting with Pact coffee",
+    "main": "main.js",
+    "dependencies": {
+        "chalk": "^3.0.0",
+        "clear": "^0.1.0",
+        "clui": "^0.3.6",
+        "dotenv": "^8.0.0",
+        "envfile": "^4.5.0",
+        "figlet": "^1.2.4",
+        "fs": "0.0.1-security",
+        "got": "^9.6.0",
+        "inquirer": "^7.0.4"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^7.0.1"
+    },
+    "scripts": {
+        "start": "node src/pactCLI.js",
+        "test": "mocha"
+    },
+    "author": "",
+    "license": "ISC"
 }

@@ -6,6 +6,8 @@ const inquirer = require('./inquirer');
 const apiComms = require('./pactAPIInterface');
 const helpers = require('./helpers');
 
+const CoffeeService = require('./CoffeeService');
+
 async function main() {
     try {
         //@todo: Let this main function be a infinite loop for inquirer until exited
@@ -33,6 +35,21 @@ async function main() {
         apiComms.deauthenticate(tokenBASE64);
     } catch (error) {
         console.log(error);
+    }
+}
+
+async function mainTest() {
+    try {
+        helpers.displayHeader();
+        const CoffeeServiceInstance = new CoffeeService();
+        while (true) {
+            helpers.displayHeader();
+            await CoffeeServiceInstance.displayOrderStatus();
+            await CoffeeServiceInstance.shutdown();
+            break;
+        }
+    } catch (e) {
+        console.log(e);
     }
 }
 
