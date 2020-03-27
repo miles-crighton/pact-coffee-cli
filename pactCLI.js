@@ -3,7 +3,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const chalk = require('chalk');
 
 const inquirer = require('./inquirer');
-const apiComms = require('./apiComms');
+const apiComms = require('./pactAPIInterface');
 const helpers = require('./helpers');
 
 async function main() {

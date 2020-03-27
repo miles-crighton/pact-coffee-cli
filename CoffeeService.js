@@ -4,6 +4,7 @@ class CoffeeService {
     constructor() {
         this.authToken = undefined;
         this.myCoffees = undefined;
+        this.userData = undefined;
         this.getAuthToken();
     }
 
@@ -29,7 +30,7 @@ class CoffeeService {
     };
 
     displayOrderStatus = async () => {
-        const userData = await apiComms.getUserData(tokenBASE64);
+        this.userData = await apiComms.getUserData(tokenBASE64);
         const orderID = userData.start.order_ids[0];
         helpers.displayOrderStatus(userData);
     };
