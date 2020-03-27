@@ -5,6 +5,7 @@ class CoffeeService {
         this.authToken = undefined;
         this.myCoffees = undefined;
         this.userData = undefined;
+        this.orderID = undefined;
         this.getAuthToken();
     }
 
@@ -12,6 +13,16 @@ class CoffeeService {
         const tokenDecimal = await apiComms.authenticate();
         const tokenBASE64 = helpers.toBASE64(tokenDecimal);
         this.authToken = tokenBASE64;
+    };
+
+    getUserData = async () => {
+        this.userData = await apiComms.getUserData(tokenBASE64);
+        this.orderID = this.userData.start.order_ids[0];
+    };
+
+    changeOrderDate = async date => {
+        const requestedDate = helpers.handleDateInput(date);
+        await apiComms.changeDate(tokenBASE64, orderID, requestedDate);
     };
 
     displayRatedCoffees = async () => {
@@ -30,10 +41,13 @@ class CoffeeService {
     };
 
     displayOrderStatus = async () => {
-        this.userData = await apiComms.getUserData(tokenBASE64);
-        const orderID = userData.start.order_ids[0];
         helpers.displayOrderStatus(userData);
     };
+
+    // getFullCoffeeData = async () => {
+    //     //const coffeeData = await apiComms.getCoffeeData(tokenBASE64)
+    //     //const available = helpers.filterAvailableCoffees(coffeeData)
+    // };
 }
 
 const filterNullCoffees = coffees => {

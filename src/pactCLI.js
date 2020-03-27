@@ -8,6 +8,7 @@ const helpers = require('./helpers');
 
 async function main() {
     try {
+        //@todo: Let this main function be a infinite loop for inquirer until exited
         helpers.displayHeader();
 
         const tokenDecimal = await apiComms.authenticate();
