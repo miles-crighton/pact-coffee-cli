@@ -1,14 +1,14 @@
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const chalk = require('chalk');
 
 const inquirer = require('./inquirer');
 const apiComms = require('./pactAPIInterface');
 const helpers = require('./helpers');
 
-const CoffeeService = require('./CoffeeService');
+const CoffeeMaker = require('./CoffeeMaker');
 
-async function main() {
+async function oldMain() {
     try {
         //@todo: Let this main function be a infinite loop for inquirer until exited
         helpers.displayHeader();
@@ -38,16 +38,20 @@ async function main() {
     }
 }
 
-async function mainTest() {
+async function main() {
     try {
         helpers.displayHeader();
-        const CoffeeServiceInstance = new CoffeeService();
-        while (true) {
-            helpers.displayHeader();
-            await CoffeeServiceInstance.displayOrderStatus();
-            await CoffeeServiceInstance.shutdown();
-            break;
-        }
+        const CoffeeMakerInstance = new CoffeeMaker();
+        await CoffeeMakerInstance.authenticate();
+        helpers.displayHeader();
+        await CoffeeMakerInstance.getUserData();
+        console.log(CoffeeMakerInstance);
+        // while (true) {
+        //     helpers.displayHeader();
+        //     await CoffeeServiceInstance.displayOrderStatus();
+        //     await CoffeeServiceInstance.shutdown();
+        //     break;
+        // }
     } catch (e) {
         console.log(e);
     }

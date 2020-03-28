@@ -24,6 +24,25 @@ module.exports = {
             throw Error('Authentication unsuccessful');
         }
     },
+    getAuthToken: async credentials => {
+        console.log('Getting auth token...');
+        try {
+            const options = { json: true, body: credentials };
+            const res = await got.post(
+                'https://api.pactcoffee.com/v1/tokens/',
+                options
+            );
+            if (res.statusCode === 201) {
+                const tokenID = res.body.token.id;
+
+                return tokenID;
+            } else {
+                throw new Error('Unable to retrieve a token');
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    },
     deauthenticate: async authID => {
         //Id is base64
         const headers = { Authorization: `Basic ${authID}` };
