@@ -6,9 +6,9 @@ const inquirer = require('./inquirer');
 const apiComms = require('./pactAPIInterface');
 const helpers = require('./helpers');
 
-// const CoffeeMaker = require('./CoffeeMaker');
+const CoffeeMaker = require('./CoffeeMaker');
 
-async function main() {
+async function oldMain() {
     try {
         //@todo: Let this main function be a infinite loop for inquirer until exited
         helpers.displayHeader();
@@ -38,23 +38,23 @@ async function main() {
     }
 }
 
-// async function mainTest() {
-//     try {
-//         helpers.displayHeader();
-//         const CoffeeMakerInstance = new CoffeeMaker();
-//         await CoffeeMakerInstance.authenticate();
-//         helpers.displayHeader();
-//         await CoffeeMakerInstance.getUserData();
-//         console.log(CoffeeMakerInstance);
-//         // while (true) {
-//         //     helpers.displayHeader();
-//         //     await CoffeeServiceInstance.displayOrderStatus();
-//         //     await CoffeeServiceInstance.shutdown();
-//         //     break;
-//         // }
-//     } catch (e) {
-//         console.log(e);
-//     }
-// }
+async function main() {
+    try {
+        helpers.displayHeader();
+        const CoffeeMakerInstance = new CoffeeMaker();
+        await CoffeeMakerInstance.authenticate();
+        helpers.displayHeader();
+        await CoffeeMakerInstance.getUserData();
+        console.log(CoffeeMakerInstance);
+        // while (true) {
+        //     helpers.displayHeader();
+        //     await CoffeeServiceInstance.displayOrderStatus();
+        //     await CoffeeServiceInstance.shutdown();
+        //     break;
+        // }
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 main();

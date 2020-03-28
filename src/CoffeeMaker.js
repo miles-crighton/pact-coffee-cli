@@ -16,20 +16,23 @@ class CoffeeMaker {
     }
 
     authenticate = async () => {
-        const credentials = await checkCredentials();
-        const msg = 'Authenticating you, please wait... ☕';
+        try {
+            const credentials = await checkCredentials();
+            const msg = 'Authenticating you, please wait... ☕';
 
-        const tokenDecimal = await statusWrapper(
-            msg,
-            APIInterface.getAuthToken,
-            credentials
-        );
-        if (!tokenDecimal) {
-            throw new Error('No token recieved');
+            const authToken = await statusWrapper(
+                msg,
+                APIInterface.getAuthToken,
+                credentials
+            );
+            if (!authToken) {
+                throw new Error('No token recieved');
+            }
+            this.authToken = authToken;
+            console.log(chalk.green('Authentication successful.'));
+        } catch (e) {
+            console.log(e);
         }
-        const tokenBASE64 = helpers.toBASE64(tokenDecimal);
-        console.log(chalk.green('Authentication successful.'));
-        this.authToken = tokenBASE64;
     };
 
     getUserData = async () => {
@@ -110,6 +113,16 @@ statusWrapper = async (msg = 'Loading, please wait...', func, ...args) => {
     const response = await func(...args);
     status.stop();
     return response;
+};
+
+writeEnvFile = (email, password) => {
+    parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password };
+    fs.writeFile('__dirname/.env', envfile.stringifySync(parsedFile), function(
+        err
+    ) {
+        if (err) throw err;
+        console.log(chalk.green('Credentials saved successfully.'));
+    });
 };
 
 module.exports = CoffeeMaker;

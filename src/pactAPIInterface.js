@@ -34,6 +34,7 @@ module.exports = {
             );
             if (res.statusCode === 201) {
                 const tokenID = res.body.token.id;
+
                 return tokenID;
             } else {
                 throw new Error('Unable to retrieve a token');
