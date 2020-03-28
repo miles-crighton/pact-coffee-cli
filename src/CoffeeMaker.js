@@ -1,34 +1,47 @@
 const helpers = require('./helpers');
 const chalk = require('chalk');
 const APIInterface = require('./pactAPIInterface');
+const inquirer = require('./inquirer');
 
-class CoffeeService {
+const CLI = require('clui');
+const Spinner = CLI.Spinner;
+
+//Classes are ES6, precompile or set prototypes.
+class CoffeeMaker {
     constructor() {
         this.authToken = undefined;
         this.myCoffees = undefined;
-        s;
         this.userData = undefined;
         this.orderID = undefined;
-        this.getAuthToken();
     }
 
-    getAuthToken = async () => {
-        const tokenDecimal = await APIInterface.authenticate();
+    authenticate = async () => {
+        const credentials = await checkCredentials();
+        const msg = 'Authenticating you, please wait... ☕';
+
+        const tokenDecimal = await statusWrapper(
+            msg,
+            APIInterface.getAuthToken,
+            credentials
+        );
         if (!tokenDecimal) {
             throw new Error('No token recieved');
         }
         const tokenBASE64 = helpers.toBASE64(tokenDecimal);
         console.log(chalk.green('Authentication successful.'));
         this.authToken = tokenBASE64;
-        this.getUserData();
     };
 
     getUserData = async () => {
-        this.userData = await APIInterface.getUserData(tokenBASE64);
-        if (!userData) {
-            throw new Error('Unable to retrive user data');
+        try {
+            this.userData = await APIInterface.getUserData(this.authToken);
+            if (!userData) {
+                throw new Error('Unable to retrive user data');
+            }
+            this.orderID = this.userData.start.order_ids[0];
+        } catch (e) {
+            console.log(e);
         }
-        this.orderID = this.userData.start.order_ids[0];
     };
 
     changeOrderDate = async date => {
@@ -79,4 +92,24 @@ const generateRatedCoffees = coffees => {
     return coffeeRatings;
 };
 
-module.exports.CoffeeService = CoffeeService;
+checkCredentials = async () => {
+    let credentials = {
+        email: process.env.CREDS_EMAIL,
+        password: process.env.CREDS_PASSWORD,
+    };
+    if (!credentials.email || !credentials.password) {
+        credentials = await inquirer.askPactCredentials();
+        writeEnvFile(credentials.email, credentials.password);
+    }
+    return credentials;
+};
+
+statusWrapper = async (msg = 'Loading, please wait...', func, ...args) => {
+    const status = new Spinner(msg);
+    status.start();
+    const response = await func(...args);
+    status.stop();
+    return response;
+};
+
+module.exports = CoffeeMaker;
