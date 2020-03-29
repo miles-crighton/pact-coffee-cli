@@ -38,6 +38,7 @@ async function oldMain() {
     }
 }
 
+//@todo wire up each function to inquirer responses
 async function main() {
     try {
         helpers.displayHeader();
@@ -46,16 +47,26 @@ async function main() {
         helpers.displayHeader();
         await CoffeeMakerInstance.getUserData();
         await CoffeeMakerInstance.displayOrderStatus();
-        await CoffeeMakerInstance.displayRatedCoffees();
-        await CoffeeMakerInstance.changeOrderDate('23/05/2020');
-        // console.log(CoffeeMakerInstance);
-        CoffeeMakerInstance.cleanup();
-        // while (true) {
-        //     helpers.displayHeader();
-        //     await CoffeeServiceInstance.displayOrderStatus();
-        //     await CoffeeServiceInstance.shutdown();
-        //     break;
-        // }
+
+        let answer;
+        let running = true;
+        while (running) {
+            answers = await inquirer.askOptions();
+            console.log(answers);
+            switch (answers.optionSelection) {
+                case 'Change delivery date':
+                    await CoffeeMakerInstance.changeOrderDate(answers.date);
+                    break;
+                case 'Display rated coffees':
+                    await CoffeeMakerInstance.displayRatedCoffees();
+                    break;
+                case 'Exit':
+                    await CoffeeMakerInstance.cleanup();
+                default:
+                    running = false;
+                    break;
+            }
+        }
     } catch (e) {
         console.log(e);
     }
