@@ -45,7 +45,9 @@ async function main() {
         await CoffeeMakerInstance.authenticate();
         helpers.displayHeader();
         await CoffeeMakerInstance.getUserData();
+        await CoffeeMakerInstance.displayRatedCoffees();
         console.log(CoffeeMakerInstance);
+        CoffeeMakerInstance.cleanup();
         // while (true) {
         //     helpers.displayHeader();
         //     await CoffeeServiceInstance.displayOrderStatus();

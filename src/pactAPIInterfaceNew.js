@@ -14,7 +14,7 @@ apiInterface.getAuthToken = async credentials => {
         options
     );
     if (res.statusCode === 201) {
-        const tokenID = toBase64(res.body.token.id);
+        const tokenID = toBASE64(res.body.token.id);
         return tokenID;
     } else {
         return new Error('Unable to retrieve a token');

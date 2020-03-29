@@ -1,6 +1,6 @@
 const helpers = require('./helpers');
 const chalk = require('chalk');
-const APIInterface = require('./pactAPIInterface');
+const APIInterface = require('./pactAPIInterfaceNew');
 const inquirer = require('./inquirer');
 
 const CLI = require('clui');
@@ -38,10 +38,10 @@ class CoffeeMaker {
     getUserData = async () => {
         try {
             this.userData = await APIInterface.getUserData(this.authToken);
-            if (!userData) {
+            if (!this.userData) {
                 throw new Error('Unable to retrive user data');
             }
-            this.orderID = this.userData.start.order_ids[0];
+            this.orderID = this.userData['start']['order_ids'][0];
         } catch (e) {
             console.log(e);
         }
@@ -49,11 +49,11 @@ class CoffeeMaker {
 
     changeOrderDate = async date => {
         const requestedDate = helpers.handleDateInput(date);
-        await APIInterface.changeDate(tokenBASE64, orderID, requestedDate);
+        await APIInterface.changeDate(this.authToken, orderID, requestedDate);
     };
 
     displayRatedCoffees = async () => {
-        this.myCoffees = await APIInterface.getMyCoffees(tokenBASE64);
+        this.myCoffees = await APIInterface.getMyCoffees(this.authToken);
         const myCoffeeRatings = generateRatedCoffees(
             filterNullCoffees(this.myCoffees)
         );
@@ -68,11 +68,25 @@ class CoffeeMaker {
     };
 
     displayOrderStatus = async () => {
-        helpers.displayOrderStatus(userData);
+        if (this.orderData) {
+            const coffeeName = orderData.entities[0].name;
+            const dispatchDate = orderData.orders[0].dispatch_on;
+            console.log(
+                chalk.yellow('Your order of'),
+                chalk.red(coffeeName),
+                chalk.yellow('☕ will be dispatched on'),
+                chalk.red(helpers.reverseDate(dispatchDate, '-', '/'))
+            );
+        } else {
+            console.log(
+                chalk.red('No user data found, try calling getUserData()')
+            );
+        }
     };
 
     cleanup = async () => {
         await APIInterface.deauthenticate(this.authToken);
+        console.log(chalk.green('Successfully cleaned up!'));
     };
 
     // getFullCoffeeData = async () => {
