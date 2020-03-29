@@ -46,7 +46,8 @@ async function main() {
         helpers.displayHeader();
         await CoffeeMakerInstance.getUserData();
         await CoffeeMakerInstance.displayRatedCoffees();
-        console.log(CoffeeMakerInstance);
+        await CoffeeMakerInstance.changeOrderDate('23/05/2020');
+        // console.log(CoffeeMakerInstance);
         CoffeeMakerInstance.cleanup();
         // while (true) {
         //     helpers.displayHeader();

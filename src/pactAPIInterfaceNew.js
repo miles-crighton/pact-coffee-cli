@@ -89,7 +89,7 @@ apiInterface.changeDispatchDate = async (authToken, orderID, date) => {
         options
     );
     if (response.statusCode === 200) {
-        return date; //`Order dispatch date successfully changed to ${date}. 👍`
+        return date;
     } else {
         return new Error('Unable to change date');
     }

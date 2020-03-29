@@ -48,8 +48,21 @@ class CoffeeMaker {
     };
 
     changeOrderDate = async date => {
-        const requestedDate = helpers.handleDateInput(date);
-        await APIInterface.changeDate(this.authToken, orderID, requestedDate);
+        try {
+            const requestedDate = helpers.handleDateInput(date);
+            const newDispatchDate = await APIInterface.changeDispatchDate(
+                this.authToken,
+                this.orderID,
+                requestedDate
+            );
+            console.log(
+                chalk.green(
+                    `Order dispatch date successfully changed to ${newDispatchDate}. 👍`
+                )
+            );
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     displayRatedCoffees = async () => {
