@@ -5,7 +5,7 @@ const apiInterface = exports;
  * @param {Object} credentials: Obj of user credentials
  * @param {String} credentials.username: Username of user
  * @param {String} credentials.password: Password for user
- * @return {String} Authorization token in decimal
+ * @return {String} Authorization token in Base64==
  */
 apiInterface.getAuthToken = async credentials => {
     try {
@@ -69,7 +69,7 @@ apiInterface.getUserData = async authToken => {
 
 /**
  * @param {String} authToken: Authorization token in base64==
- * @return {Object}         List of Pact products
+ * @return {Object}: List of Pact products
  */
 apiInterface.getProductData = async authToken => {
     try {
@@ -91,7 +91,7 @@ apiInterface.getProductData = async authToken => {
  * @param {String} authToken: Authorization token in Base64==
  * @param {String} orderID: ID of Pact order to be altered
  * @param {ISO Date} date: New dispatch date
- * @return {ISO Date} New dispatch date returned
+ * @return {ISO Date}: New dispatch date returned
  */
 apiInterface.changeDispatchDate = async (authToken, orderID, date) => {
     try {
@@ -151,7 +151,7 @@ apiInterface.changeCoffee = async (authToken, orderId, item, coffee) => {
 
 /**
  * @param {String} authToken: Authorization token in base64==
- * @return {Array} Array of coffee objects
+ * @return {Array}: Array of coffee objects
  */
 apiInterface.getMyCoffees = async authToken => {
     try {
