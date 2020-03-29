@@ -1,6 +1,6 @@
 const helpers = require('./helpers');
 const chalk = require('chalk');
-const APIInterface = require('./pactAPIInterfaceNew');
+const APIInterface = require('./pactAPIInterface');
 const inquirer = require('./inquirer');
 
 const CLI = require('clui');

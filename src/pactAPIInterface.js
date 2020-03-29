@@ -1,76 +1,104 @@
 const got = require('got');
-const chalk = require('chalk');
-const CLI = require('clui');
-const inquirer = require('./inquirer');
-const fs = require('fs');
-const envfile = require('envfile');
+const apiInterface = exports;
 
-const Spinner = CLI.Spinner;
-
-module.exports = {
-    authenticate: async () => {
-        const credentials = await checkCredentials();
-
-        const response = await statusWrapper(got.post, [
+/**
+ * @param {Object} credentials: Obj of user credentials
+ * @param {String} credentials.username: Username of user
+ * @param {String} credentials.password: Password for user
+ * @return {String} Authorization token in Base64==
+ */
+apiInterface.getAuthToken = async credentials => {
+    try {
+        const options = { json: true, body: credentials };
+        const res = await got.post(
             'https://api.pactcoffee.com/v1/tokens/',
-            { json: true, body: credentials },
-        ]);
-
-        if (response.statusCode === 201) {
-            const tokenID = response.body.token.id;
-            console.log(chalk.green('\nAuthentication successful.'));
+            options
+        );
+        if (res.statusCode === 201) {
+            const tokenID = toBASE64(res.body.token.id);
             return tokenID;
         } else {
-            throw Error('Authentication unsuccessful');
+            return new Error('Unable to retrieve a token');
         }
-    },
-    getAuthToken: async credentials => {
-        console.log('Getting auth token...');
-        try {
-            const options = { json: true, body: credentials };
-            const res = await got.post(
-                'https://api.pactcoffee.com/v1/tokens/',
-                options
-            );
-            if (res.statusCode === 201) {
-                const tokenID = res.body.token.id;
+    } catch (e) {
+        return e;
+    }
+};
 
-                return tokenID;
-            } else {
-                throw new Error('Unable to retrieve a token');
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    },
-    deauthenticate: async authID => {
-        //Id is base64
-        const headers = { Authorization: `Basic ${authID}` };
+/**
+ * @param {String} authToken: Authorization token in Base64==
+ */
+apiInterface.deauthenticate = async authToken => {
+    try {
+        const headers = { Authorization: `Basic ${authToken}` };
         const response = await got.delete(
             'https://api.pactcoffee.com/v1/tokens/me',
             { headers }
         );
         if (response.statusCode === 204) {
-            console.log(chalk.green('Deauthentication successful.'));
-        } else {
-            console.log(chalk.red('Unable to deauthenticate.'));
-        }
-    },
-    getUserData: async authID => {
-        return getData(authID, (type = 'user'));
-    },
-    getCoffeeData: async authID => {
-        return getData(authID, (type = 'coffee'));
-    },
-    changeDate: async (authID, orderID, date) => {
-        if (!checkDateFormat(date)) {
-            console.log(
-                chalk.red('Date format incorrect, dispatch date unchanged')
-            );
             return;
+        } else {
+            throw new Error('Unable to deauthenticate');
         }
-        const headers = { Authorization: `Basic ${authID}` };
+    } catch (e) {
+        return e;
+    }
+};
 
+/**
+ * @param {String} authToken: Authorization token in Base64==
+ */
+apiInterface.getUserData = async authToken => {
+    try {
+        const headers = { Authorization: `Basic ${authToken}` };
+        const response = await got(
+            'https://api.pactcoffee.com/v1/users/me/start',
+            {
+                headers,
+            }
+        );
+        if (response.statusCode === 200) {
+            return JSON.parse(response.body);
+        } else {
+            return new Error('Unable to retrieve user data');
+        }
+    } catch (e) {
+        return e;
+    }
+};
+
+/**
+ * @param {String} authToken: Authorization token in base64==
+ * @return {Object}: List of Pact products
+ */
+apiInterface.getProductData = async authToken => {
+    try {
+        const headers = { Authorization: `Basic ${authToken}` };
+        const response = await got('https://api.pactcoffee.com/v2/products/', {
+            headers,
+        });
+        if (response.statusCode === 200) {
+            return JSON.parse(response.body);
+        } else {
+            return new Error('Unable to retrieve product list');
+        }
+    } catch (e) {
+        return e;
+    }
+};
+
+/**
+ * @param {String} authToken: Authorization token in Base64==
+ * @param {String} orderID: ID of Pact order to be altered
+ * @param {ISO Date} date: New dispatch date
+ * @return {ISO Date}: New dispatch date returned
+ */
+apiInterface.changeDispatchDate = async (authToken, orderID, date) => {
+    try {
+        if (!checkDateFormat(date)) {
+            return new Error('Incorrect date format, ISO YYYY-MM-DD required');
+        }
+        const headers = { Authorization: `Basic ${authToken}` };
         const options = {
             headers,
             json: true,
@@ -81,17 +109,25 @@ module.exports = {
             options
         );
         if (response.statusCode === 200) {
-            console.log(
-                chalk.green(
-                    `Order dispatch date successfully changed to ${date}. 👍`
-                )
-            );
+            return date;
         } else {
-            console.log(chalk.red('Unable to change date'));
+            return new Error('Unable to change date');
         }
-    },
-    changeCoffee: async (authID, orderId, item, coffee) => {
-        const headers = { Authorization: `Basic ${authID}` };
+    } catch (e) {
+        return e;
+    }
+};
+
+/**
+ * @param {String} authToken: Authorization token in Base64==
+ * @param {String} orderID: ID of Pact order to be altered
+ * @param {} item: TBA
+ * @param {} coffee: TBA
+ * @return {} TBA
+ */
+apiInterface.changeCoffee = async (authToken, orderId, item, coffee) => {
+    try {
+        const headers = { Authorization: `Basic ${authToken}` };
         //TODO: get correct data to fill the body
         //Change { sku, extended_sku, product_name }
         const options = {
@@ -104,29 +140,38 @@ module.exports = {
             options
         );
         if (response.statusCode === 200) {
-            console.log(chalk.green(`Date successfully changed to ${date}`));
+            return;
         } else {
-            console.log(chalk.red('Unable to change date'));
+            return new Error('Unable to change coffee');
         }
-    },
-    getMyCoffees: async authID => {
-        const headers = { Authorization: `Basic ${authID}` };
+    } catch (e) {
+        return e;
+    }
+};
+
+/**
+ * @param {String} authToken: Authorization token in base64==
+ * @return {Array}: Array of coffee objects
+ */
+apiInterface.getMyCoffees = async authToken => {
+    try {
+        const headers = { Authorization: `Basic ${authToken}` };
         const options = { headers, json: true };
 
-        try {
-            /** @Return { coffees: [ { sku: string, name: string, origin: string, rating: boolean }, ... ]} */
-            const response = await got.get(
-                `https://api.pactcoffee.com/v1/users/me/coffees`,
-                options
-            );
+        /** @Return { coffees: [ { sku: string, name: string, origin: string, rating: boolean }, ... ]} */
+        const response = await got.get(
+            `https://api.pactcoffee.com/v1/users/me/coffees`,
+            options
+        );
 
-            if (response.statusCode === 200) {
-                return response.body['coffees'];
-            }
-        } catch (e) {
-            chalk.red(`Error occured: ${e}`);
+        if (response.statusCode === 200) {
+            return response.body['coffees'];
+        } else {
+            return new Error("Unable to get user' coffees");
         }
-    },
+    } catch (e) {
+        return e;
+    }
 };
 
 checkDateFormat = date => {
@@ -134,53 +179,6 @@ checkDateFormat = date => {
     return regex.test(date);
 };
 
-statusWrapper = async (func, args) => {
-    const status = new Spinner('Authenticating you, please wait... ☕');
-    status.start();
-    const response = await func(...args);
-    status.stop();
-    return response;
-};
-
-getData = async (authID, type) => {
-    const headers = { Authorization: `Basic ${authID}` };
-    const urls = {
-        user: 'https://api.pactcoffee.com/v1/users/me/start',
-        coffee: 'https://api.pactcoffee.com/v2/products/',
-    };
-
-    if (!(type in urls)) {
-        console.log(chalk.red(`Invalid data request type: ${type}`));
-        return;
-    }
-
-    const response = await got(urls[type], { headers });
-    if (response.statusCode === 200) {
-        //console.log('Data retrieved: ', JSON.parse(response.body))
-        return JSON.parse(response.body);
-    } else {
-        console.log(chalk.red(`Unable to retrieve ${type} data`));
-    }
-};
-
-checkCredentials = async () => {
-    let credentials = {
-        email: process.env.CREDS_EMAIL,
-        password: process.env.CREDS_PASSWORD,
-    };
-    if (!credentials.email || !credentials.password) {
-        credentials = await inquirer.askPactCredentials();
-        writeEnvFile(credentials.email, credentials.password);
-    }
-    return credentials;
-};
-
-writeEnvFile = (email, password) => {
-    parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password };
-    fs.writeFile('__dirname/.env', envfile.stringifySync(parsedFile), function(
-        err
-    ) {
-        if (err) throw err;
-        console.log(chalk.green('Credentials saved successfully.'));
-    });
+toBASE64 = str => {
+    return Buffer.from(str).toString('base64') + '==';
 };
