@@ -81,9 +81,9 @@ class CoffeeMaker {
     };
 
     displayOrderStatus = async () => {
-        if (this.orderData) {
-            const coffeeName = orderData.entities[0].name;
-            const dispatchDate = orderData.orders[0].dispatch_on;
+        if (this.userData) {
+            const coffeeName = this.userData.entities[0]['name'];
+            const dispatchDate = this.userData.orders[0]['dispatch_on'];
             console.log(
                 chalk.yellow('Your order of'),
                 chalk.red(coffeeName),

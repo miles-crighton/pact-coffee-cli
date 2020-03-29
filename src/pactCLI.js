@@ -45,6 +45,7 @@ async function main() {
         await CoffeeMakerInstance.authenticate();
         helpers.displayHeader();
         await CoffeeMakerInstance.getUserData();
+        await CoffeeMakerInstance.displayOrderStatus();
         await CoffeeMakerInstance.displayRatedCoffees();
         await CoffeeMakerInstance.changeOrderDate('23/05/2020');
         // console.log(CoffeeMakerInstance);
