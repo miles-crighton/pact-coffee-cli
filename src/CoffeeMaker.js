@@ -72,6 +72,7 @@ class CoffeeMaker {
 
     displayRatedCoffees = async () => {
         //Use cached coffee ratings if possible
+        //Need to make sure data not stale when adding a change coffee rating feature
         if (!this.myCoffees) {
             this.myCoffees = await APIInterface.getMyCoffees(this.authToken);
         }
