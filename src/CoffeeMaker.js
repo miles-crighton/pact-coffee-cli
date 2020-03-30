@@ -71,7 +71,10 @@ class CoffeeMaker {
     };
 
     displayRatedCoffees = async () => {
-        this.myCoffees = await APIInterface.getMyCoffees(this.authToken);
+        //Use cached coffee ratings if possible
+        if (!this.myCoffees) {
+            this.myCoffees = await APIInterface.getMyCoffees(this.authToken);
+        }
         const myCoffeeRatings = generateRatedCoffees(
             filterNullCoffees(this.myCoffees)
         );

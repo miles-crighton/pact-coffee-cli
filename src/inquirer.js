@@ -7,7 +7,11 @@ module.exports = {
                 name: 'optionSelection',
                 type: 'list',
                 message: 'Select an action:',
-                choices: ['Change delivery date', 'Exit'],
+                choices: [
+                    'Change delivery date',
+                    'Display rated coffees',
+                    'Exit',
+                ],
             },
             {
                 name: 'date',
@@ -24,12 +28,6 @@ module.exports = {
                     }
                 },
             },
-            // {
-            //     name: 'exit',
-            //     when: function(answers) {
-            //         return answers.optionSelection === 'Exit';
-            //     },
-            // },
             {
                 name: 'coffeeType',
                 type: 'list',
