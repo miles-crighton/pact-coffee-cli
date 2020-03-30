@@ -11,7 +11,7 @@ async function main() {
     try {
         helpers.displayHeader();
         const CoffeeMakerInstance = new CoffeeMaker();
-        // await CoffeeMakerInstance.authenticate();
+        await CoffeeMakerInstance.authenticate();
         helpers.displayHeader();
         await CoffeeMakerInstance.getUserData();
         await CoffeeMakerInstance.displayOrderStatus();
