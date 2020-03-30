@@ -11,7 +11,7 @@ async function main() {
     try {
         helpers.displayHeader();
         const CoffeeMakerInstance = new CoffeeMaker();
-        await CoffeeMakerInstance.authenticate();
+        // await CoffeeMakerInstance.authenticate();
         helpers.displayHeader();
         await CoffeeMakerInstance.getUserData();
         await CoffeeMakerInstance.displayOrderStatus();
@@ -20,7 +20,6 @@ async function main() {
         let running = true;
         while (running) {
             answers = await inquirer.askOptions();
-            console.log(answers);
             switch (answers.optionSelection) {
                 case 'Change delivery date':
                     await CoffeeMakerInstance.changeOrderDate(answers.date);
@@ -36,7 +35,7 @@ async function main() {
             }
         }
     } catch (e) {
-        console.log(e);
+        console.log(chalk.red(e));
     }
 }
 

@@ -21,7 +21,10 @@ apiInterface.getAuthToken = async credentials => {
             return new Error('Unable to retrieve a token');
         }
     } catch (e) {
-        return e;
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
     }
 };
 
@@ -30,6 +33,9 @@ apiInterface.getAuthToken = async credentials => {
  */
 apiInterface.deauthenticate = async authToken => {
     try {
+        if (!authToken) {
+            throw new Error('No authToken provided');
+        }
         const headers = { Authorization: `Basic ${authToken}` };
         const response = await got.delete(
             'https://api.pactcoffee.com/v1/tokens/me',
@@ -41,7 +47,10 @@ apiInterface.deauthenticate = async authToken => {
             throw new Error('Unable to deauthenticate');
         }
     } catch (e) {
-        return e;
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
     }
 };
 
@@ -50,6 +59,9 @@ apiInterface.deauthenticate = async authToken => {
  */
 apiInterface.getUserData = async authToken => {
     try {
+        if (!authToken) {
+            throw new Error('No authToken provided');
+        }
         const headers = { Authorization: `Basic ${authToken}` };
         const response = await got(
             'https://api.pactcoffee.com/v1/users/me/start',
@@ -63,7 +75,10 @@ apiInterface.getUserData = async authToken => {
             return new Error('Unable to retrieve user data');
         }
     } catch (e) {
-        return e;
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
     }
 };
 
@@ -73,6 +88,9 @@ apiInterface.getUserData = async authToken => {
  */
 apiInterface.getProductData = async authToken => {
     try {
+        if (!authToken) {
+            throw new Error('No authToken provided');
+        }
         const headers = { Authorization: `Basic ${authToken}` };
         const response = await got('https://api.pactcoffee.com/v2/products/', {
             headers,
@@ -80,10 +98,13 @@ apiInterface.getProductData = async authToken => {
         if (response.statusCode === 200) {
             return JSON.parse(response.body);
         } else {
-            return new Error('Unable to retrieve product list');
+            throw new Error('Unable to retrieve product list');
         }
     } catch (e) {
-        return e;
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
     }
 };
 
@@ -95,6 +116,9 @@ apiInterface.getProductData = async authToken => {
  */
 apiInterface.changeDispatchDate = async (authToken, orderID, date) => {
     try {
+        if (!authToken || !orderID || !date) {
+            throw new Error('An argument is undefined at changeDispatchDate');
+        }
         if (!checkDateFormat(date)) {
             return new Error('Incorrect date format, ISO YYYY-MM-DD required');
         }
@@ -111,10 +135,13 @@ apiInterface.changeDispatchDate = async (authToken, orderID, date) => {
         if (response.statusCode === 200) {
             return date;
         } else {
-            return new Error('Unable to change date');
+            throw new Error('Unable to change date');
         }
     } catch (e) {
-        return e;
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
     }
 };
 
@@ -127,6 +154,9 @@ apiInterface.changeDispatchDate = async (authToken, orderID, date) => {
  */
 apiInterface.changeCoffee = async (authToken, orderId, item, coffee) => {
     try {
+        if (!authToken) {
+            throw new Error('No authToken provided');
+        }
         const headers = { Authorization: `Basic ${authToken}` };
         //TODO: get correct data to fill the body
         //Change { sku, extended_sku, product_name }
@@ -145,7 +175,10 @@ apiInterface.changeCoffee = async (authToken, orderId, item, coffee) => {
             return new Error('Unable to change coffee');
         }
     } catch (e) {
-        return e;
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
     }
 };
 
@@ -155,6 +188,9 @@ apiInterface.changeCoffee = async (authToken, orderId, item, coffee) => {
  */
 apiInterface.getMyCoffees = async authToken => {
     try {
+        if (!authToken) {
+            throw new Error('No authToken provided');
+        }
         const headers = { Authorization: `Basic ${authToken}` };
         const options = { headers, json: true };
 
@@ -167,10 +203,13 @@ apiInterface.getMyCoffees = async authToken => {
         if (response.statusCode === 200) {
             return response.body['coffees'];
         } else {
-            return new Error("Unable to get user' coffees");
+            throw new Error("Unable to get user' coffees");
         }
     } catch (e) {
-        return e;
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
     }
 };
 

@@ -31,19 +31,24 @@ class CoffeeMaker {
             this.authToken = authToken;
             console.log(chalk.green('Authentication successful.'));
         } catch (e) {
-            console.log(e);
+            console.log(chalk.red(e));
         }
     };
 
     getUserData = async () => {
         try {
+            if (!this.authToken) {
+                throw new Error(
+                    'Need to be authenticated first, try calling authenticate()'
+                );
+            }
             this.userData = await APIInterface.getUserData(this.authToken);
             if (!this.userData) {
                 throw new Error('Unable to retrive user data');
             }
             this.orderID = this.userData['start']['order_ids'][0];
         } catch (e) {
-            console.log(e);
+            console.log(chalk.red(e));
         }
     };
 
@@ -61,7 +66,7 @@ class CoffeeMaker {
                 )
             );
         } catch (e) {
-            console.log(e);
+            console.log(chalk.red(e));
         }
     };
 
@@ -81,7 +86,12 @@ class CoffeeMaker {
     };
 
     displayOrderStatus = async () => {
-        if (this.userData) {
+        try {
+            if (!this.userData) {
+                throw new Error(
+                    'No user data found, try calling getUserData()'
+                );
+            }
             const coffeeName = this.userData.entities[0]['name'];
             const dispatchDate = this.userData.orders[0]['dispatch_on'];
             console.log(
@@ -90,10 +100,8 @@ class CoffeeMaker {
                 chalk.yellow('☕ will be dispatched on'),
                 chalk.red(helpers.reverseDate(dispatchDate, '-', '/'))
             );
-        } else {
-            console.log(
-                chalk.red('No user data found, try calling getUserData()')
-            );
+        } catch (e) {
+            console.log(chalk.red(e));
         }
     };
 
