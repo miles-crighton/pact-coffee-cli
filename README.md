@@ -35,7 +35,7 @@ node pactCLI.js
 Run this command from the project directory:
 
 ```
-echo "alias pact='node "$PWD"/pactCLI.js'" >> ~/.bash_profile
+echo "alias pact='node "$PWD"/src/pactCLI.js'" >> ~/.bash_profile
 ```
 
 You should now be able to run the program simply using:
