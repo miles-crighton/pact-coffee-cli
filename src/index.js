@@ -7,7 +7,23 @@ const helpers = require('./helpers');
 
 const CoffeeMaker = require('./CoffeeMaker');
 
-async function main() {
+exports.changeDate = async function (date) {
+    const CoffeeMakerInstance = new CoffeeMaker();
+    await CoffeeMakerInstance.authenticate();
+    await CoffeeMakerInstance.getUserData();
+    await CoffeeMakerInstance.changeOrderDate(date);
+    await CoffeeMakerInstance.cleanup();
+};
+
+exports.dispatchWhen = async function () {
+    const CoffeeMakerInstance = new CoffeeMaker();
+    await CoffeeMakerInstance.authenticate();
+    await CoffeeMakerInstance.getUserData();
+    await CoffeeMakerInstance.displayOrderStatus();
+    await CoffeeMakerInstance.cleanup();
+};
+
+exports.main = async function main() {
     try {
         helpers.displayHeader();
         const CoffeeMakerInstance = new CoffeeMaker();
@@ -37,6 +53,4 @@ async function main() {
     } catch (e) {
         console.log(chalk.red(e));
     }
-}
-
-main();
+};
