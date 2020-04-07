@@ -29,7 +29,7 @@ class CoffeeMaker {
                 throw new Error('No token recieved');
             }
             this.authToken = authToken;
-            console.log(chalk.green('Authentication successful.'));
+            //console.log(chalk.green('Authentication successful.'));
         } catch (e) {
             console.log(chalk.red(e));
         }
@@ -52,7 +52,7 @@ class CoffeeMaker {
         }
     };
 
-    changeOrderDate = async date => {
+    changeOrderDate = async (date) => {
         try {
             const requestedDate = helpers.handleDateInput(date);
             const newDispatchDate = await APIInterface.changeDispatchDate(
@@ -80,7 +80,7 @@ class CoffeeMaker {
             filterNullCoffees(this.myCoffees)
         );
 
-        Object.keys(myCoffeeRatings).forEach(coffeeName => {
+        Object.keys(myCoffeeRatings).forEach((coffeeName) => {
             if (myCoffeeRatings[coffeeName]) {
                 console.log(chalk.green(`${coffeeName}: 👍`));
             } else {
@@ -111,7 +111,7 @@ class CoffeeMaker {
 
     cleanup = async () => {
         await APIInterface.deauthenticate(this.authToken);
-        console.log(chalk.green('Successfully cleaned up!'));
+        //console.log(chalk.green('Successfully cleaned up!'));
     };
 
     // getFullCoffeeData = async () => {
@@ -120,15 +120,15 @@ class CoffeeMaker {
     // };
 }
 
-const filterNullCoffees = coffees => {
-    return coffees.filter(coffee => {
+const filterNullCoffees = (coffees) => {
+    return coffees.filter((coffee) => {
         return coffee.rating !== null;
     });
 };
 
-const generateRatedCoffees = coffees => {
+const generateRatedCoffees = (coffees) => {
     const coffeeRatings = {};
-    coffees.forEach(coffee => {
+    coffees.forEach((coffee) => {
         coffeeRatings[coffee.name] = coffee.rating;
     });
     return coffeeRatings;
@@ -156,7 +156,7 @@ statusWrapper = async (msg = 'Loading, please wait...', func, ...args) => {
 
 writeEnvFile = (email, password) => {
     parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password };
-    fs.writeFile('__dirname/.env', envfile.stringifySync(parsedFile), function(
+    fs.writeFile('__dirname/.env', envfile.stringifySync(parsedFile), function (
         err
     ) {
         if (err) throw err;
