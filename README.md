@@ -16,11 +16,11 @@ To gain quick access to app functionality use:
 
 ## Install via npm
 
-`npm i -g pact-cli`
+`npm i -g pact-coffee-cli`
 
 or try it out first with:
 
-`npx pact-cli`
+`npx pact-coffee-cli`
 
 ## Install manually
 
