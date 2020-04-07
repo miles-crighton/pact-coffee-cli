@@ -2,7 +2,7 @@
     "name": "pact-coffee-cli",
     "version": "1.0.0",
     "description": "A CLI for interacting with Pact coffee",
-    "main": "main.js",
+    "main": "src/index.js",
     "bin": {
         "pact": "./src/cli.js"
     },
@@ -26,6 +26,6 @@
         "start": "node src/index.js",
         "test": "mocha"
     },
-    "author": "",
+    "author": "Miles Crighton",
     "license": "ISC"
 }
