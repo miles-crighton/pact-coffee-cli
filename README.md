@@ -16,7 +16,7 @@ To gain quick access to app functionality use:
 
 ## Install via npm
 
-`npm i -g pact-coffee-cli`
+`npm i -g pact-coffee-cli` then use the command `pact`
 
 or try it out first with:
 
