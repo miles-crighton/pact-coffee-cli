@@ -144,7 +144,6 @@ checkCredentials = async () => {
     };
     if (!credentials.email || !credentials.password) {
         credentials = await inquirer.askPactCredentials();
-        console.log(credentials);
         writeEnvFile(credentials.email, credentials.password);
     }
     return credentials;
