@@ -1,18 +1,20 @@
 # Pact Coffee CLI
 
-![Screenshot of software](/screenshot.png?raw=true 'Main CLI')
+Communicate with [Pact's](https://www.pactcoffee.com/) Servers via the comfort of your own terminal. ☕
 
-A fan-made project offering command-line interactions with Pact's servers.
+## Usage
 
-Running the cli without arguments will open the interactive application.
+Running `pact` without arguments will open the interactive CLI.
 
-## CLI args
+### Arguments
 
-To gain quick access to app functionality use:
+Use command arguments to quickly access features (eg `pact -d 3d`, dispatch coffee 3 days from now)
 
--   -d "DATE-STRING" : Change the dispatch date of your next order
+-   `--date or -d "DATE-STRING"` : Change the dispatch date of your next order
+
     -   Can use full date (DD-MM-YYY) or shorthand (4d/1w) representing days and weeks from the present date.
--   -w : Displays when coffee is next due to be dispatched
+
+-   `--next or -n` : Displays when coffee is next due to be dispatched
 
 ## Install via npm
 
@@ -40,21 +42,9 @@ Run the script with:
 
 Run this command from the project directory:
 
-`echo "alias pact='"$PWD"/src/cli.js'" >> ~/.bash_profile`
+`echo "alias pact='"$PWD"/src/cli.js'" >> ~/.bashrc`
 
-You should now be able to run the program simply using:
-
-`pact`
-
-## Todo
-
--   [ ] Add description of API interface as standalone lib
--   [x] Deauthenticate on error
--   [x] Prevent dispatch date being a weekend (causes error)
--   [ ] Create API for additional actions (ASAP dispatch, Select coffee)
--   [x] Add ability to short-hand input date (ie. 2w, 5d)
--   [x] Need to read .env file from absolute dir not relative on alias call
--   [x] Use yargs to handle quick cmd flags
+You should now be able to run the program simply using `pact`.
 
 ## Disclaimer
 

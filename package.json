@@ -1,6 +1,6 @@
 {
     "name": "pact-coffee-cli",
-    "version": "1.0.41",
+    "version": "1.0.42",
     "description": "A CLI for interacting with Pact coffee",
     "main": "src/index.js",
     "bin": {
@@ -12,7 +12,6 @@
         "clui": "^0.3.6",
         "dotenv": "^8.0.0",
         "envfile": "^4.5.0",
-        "figlet": "^1.2.4",
         "fs": "0.0.1-security",
         "got": "^9.6.0",
         "inquirer": "^7.0.4",
