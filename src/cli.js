@@ -5,10 +5,10 @@ let argv = require('yargs')
         type: 'string',
         description: 'Change the date...',
     })
-    .option('when', {
-        alias: 'w',
+    .option('next', {
+        alias: 'n',
         type: 'boolean',
-        description: 'Find out when coffee is incoming.',
+        description: 'Find out when your next coffee is incoming.',
     }).argv;
 
 const pact = require('./index.js');

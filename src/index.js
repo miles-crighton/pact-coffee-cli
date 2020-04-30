@@ -3,7 +3,6 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const chalk = require('chalk');
 
 const inquirer = require('./inquirer');
-const helpers = require('./helpers');
 
 const CoffeeMaker = require('./CoffeeMaker');
 
@@ -25,10 +24,8 @@ exports.dispatchWhen = async function () {
 
 exports.main = async function main() {
     try {
-        helpers.displayHeader();
         const CoffeeMakerInstance = new CoffeeMaker();
         await CoffeeMakerInstance.authenticate();
-        helpers.displayHeader();
         await CoffeeMakerInstance.getUserData();
         await CoffeeMakerInstance.displayOrderStatus();
 
