@@ -2,6 +2,9 @@ const helpers = require('./helpers');
 const chalk = require('chalk');
 const APIInterface = require('./pactAPIInterface');
 const inquirer = require('./inquirer');
+const fs = require('fs');
+const path = require('path');
+const envfile = require('envfile');
 
 const CLI = require('clui');
 const Spinner = CLI.Spinner;
@@ -141,6 +144,7 @@ checkCredentials = async () => {
     };
     if (!credentials.email || !credentials.password) {
         credentials = await inquirer.askPactCredentials();
+        console.log(credentials);
         writeEnvFile(credentials.email, credentials.password);
     }
     return credentials;
@@ -156,12 +160,14 @@ statusWrapper = async (msg = 'Loading, please wait...', func, ...args) => {
 
 writeEnvFile = (email, password) => {
     parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password };
-    fs.writeFile('__dirname/.env', envfile.stringifySync(parsedFile), function (
-        err
-    ) {
-        if (err) throw err;
-        console.log(chalk.green('Credentials saved successfully.'));
-    });
+    fs.writeFile(
+        path.join(__dirname, '..', '.env'),
+        envfile.stringifySync(parsedFile),
+        function (err) {
+            if (err) throw err;
+            console.log(chalk.green('Credentials saved successfully.'));
+        }
+    );
 };
 
 module.exports = CoffeeMaker;
