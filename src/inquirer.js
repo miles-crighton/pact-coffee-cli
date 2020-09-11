@@ -9,6 +9,7 @@ module.exports = {
                 message: 'Select an action:',
                 choices: [
                     'Change delivery date',
+                    'View order history',
                     'Display rated coffees',
                     'Exit',
                 ],
@@ -17,10 +18,10 @@ module.exports = {
                 name: 'date',
                 type: 'input',
                 message: 'Enter a new delivery date:',
-                when: function(answers) {
+                when: function (answers) {
                     return answers.optionSelection === 'Change delivery date';
                 },
-                validate: function(value) {
+                validate: function (value) {
                     if (validateNewDate(value)) {
                         return true;
                     } else {
@@ -33,7 +34,7 @@ module.exports = {
                 type: 'list',
                 message: 'Select a new coffee:',
                 choices: coffeeTypes,
-                when: function(answers) {
+                when: function (answers) {
                     return answers.optionSelected === 'Change coffee type';
                 },
             },
@@ -46,7 +47,7 @@ module.exports = {
                 name: 'email',
                 type: 'input',
                 message: 'Please enter your Pact email:',
-                validate: function(value) {
+                validate: function (value) {
                     if (value.length) {
                         return true;
                     } else {
@@ -58,7 +59,7 @@ module.exports = {
                 name: 'password',
                 type: 'password',
                 messsage: 'Please enter your Pact password',
-                validate: function(value) {
+                validate: function (value) {
                     if (value.length) {
                         return true;
                     } else {
@@ -71,10 +72,10 @@ module.exports = {
     },
 };
 
-const validateNewDate = date => {
+const validateNewDate = (date) => {
     const regexDate = /^\d{2}\/\d{2}\/\d{4}$/g;
     const regexShorthand = /^\d{1,2}[dw]$/g;
-    Date.prototype.isValid = function() {
+    Date.prototype.isValid = function () {
         // An invalid date object returns NaN for getTime() and NaN is the only
         // object not strictly equal to itself.
         return this.getTime() === this.getTime();

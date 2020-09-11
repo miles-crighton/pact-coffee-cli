@@ -1,6 +1,8 @@
 # Pact Coffee CLI
 
-Communicate with [Pact's](https://www.pactcoffee.com/) Servers via the comfort of your own terminal. ☕
+![CLI screenshot](https://user-images.githubusercontent.com/39874506/92900128-52468580-f417-11ea-803c-958e123a921b.png?sanitize=true)
+
+Communicate with [Pact's](https://www.pactcoffee.com/) servers via the comfort of your own terminal. ☕
 
 ## Usage
 

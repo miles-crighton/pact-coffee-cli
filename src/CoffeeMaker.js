@@ -5,6 +5,7 @@ const inquirer = require('./inquirer');
 const fs = require('fs');
 const path = require('path');
 const envfile = require('envfile');
+const moment = require('moment');
 
 const CLI = require('clui');
 const Spinner = CLI.Spinner;
@@ -107,6 +108,61 @@ class CoffeeMaker {
                 chalk.yellow('☕ will be dispatched on'),
                 chalk.red(helpers.reverseDate(dispatchDate, '-', '/'))
             );
+        } catch (e) {
+            console.log(chalk.red(e));
+        }
+    };
+
+    displayOrderHistory = async () => {
+        try {
+            if (!this.authToken) {
+                throw new Error(
+                    'No auth token found, try calling authenticate()'
+                );
+            }
+            const orderHistory = await APIInterface.getOrderHistory(
+                this.authToken
+            );
+
+            if (orderHistory) {
+                let slicedOrderHistory = orderHistory['orders'];
+                if (slicedOrderHistory.length > 5) {
+                    slicedOrderHistory = orderHistory['orders'].slice(0, 5);
+                }
+
+                console.log(
+                    chalk.white.bold(
+                        `Last ${slicedOrderHistory.length} orders:`
+                    )
+                );
+
+                for (let order of slicedOrderHistory) {
+                    let coffeeItem = orderHistory.items.filter(
+                        (item) => item.id === order.item_ids[0]
+                    );
+                    if (coffeeItem) {
+                        coffeeItem = coffeeItem[0];
+                        const orderStatus = order['current_state'];
+
+                        console.log(
+                            chalk.white.bold(
+                                `${moment(
+                                    order.dispatch_on,
+                                    'YYYY-MM-DD'
+                                ).format('Do MMM YYYY')}: `
+                            ),
+                            chalk.yellow(coffeeItem.product_name),
+                            orderStatus === 'shipped'
+                                ? chalk.green(
+                                      `(Status: ${orderStatus.toUpperCase()} ✅)`
+                                  )
+                                : chalk.red(
+                                      `(Status: ${orderStatus.toUpperCase()} ❌)`
+                                  )
+                        );
+                    }
+                }
+            }
         } catch (e) {
             console.log(chalk.red(e));
         }

@@ -37,6 +37,9 @@ exports.main = async function main() {
                 case 'Change delivery date':
                     await CoffeeMakerInstance.changeOrderDate(answers.date);
                     break;
+                case 'View order history':
+                    await CoffeeMakerInstance.displayOrderHistory();
+                    break;
                 case 'Display rated coffees':
                     await CoffeeMakerInstance.displayRatedCoffees();
                     break;

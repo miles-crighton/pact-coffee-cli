@@ -7,7 +7,7 @@ const apiInterface = exports;
  * @param {String} credentials.password: Password for user
  * @return {String} Authorization token in Base64==
  */
-apiInterface.getAuthToken = async credentials => {
+apiInterface.getAuthToken = async (credentials) => {
     try {
         const options = { json: true, body: credentials };
         const res = await got.post(
@@ -31,7 +31,7 @@ apiInterface.getAuthToken = async credentials => {
 /**
  * @param {String} authToken: Authorization token in Base64==
  */
-apiInterface.deauthenticate = async authToken => {
+apiInterface.deauthenticate = async (authToken) => {
     try {
         if (!authToken) {
             throw new Error('No authToken provided');
@@ -57,7 +57,7 @@ apiInterface.deauthenticate = async authToken => {
 /**
  * @param {String} authToken: Authorization token in Base64==
  */
-apiInterface.getUserData = async authToken => {
+apiInterface.getUserData = async (authToken) => {
     try {
         if (!authToken) {
             throw new Error('No authToken provided');
@@ -86,7 +86,7 @@ apiInterface.getUserData = async authToken => {
  * @param {String} authToken: Authorization token in base64==
  * @return {Object}: List of Pact products
  */
-apiInterface.getProductData = async authToken => {
+apiInterface.getProductData = async (authToken) => {
     try {
         if (!authToken) {
             throw new Error('No authToken provided');
@@ -186,7 +186,7 @@ apiInterface.changeCoffee = async (authToken, orderId, item, coffee) => {
  * @param {String} authToken: Authorization token in base64==
  * @return {Array}: Array of coffee objects
  */
-apiInterface.getMyCoffees = async authToken => {
+apiInterface.getMyCoffees = async (authToken) => {
     try {
         if (!authToken) {
             throw new Error('No authToken provided');
@@ -213,11 +213,44 @@ apiInterface.getMyCoffees = async authToken => {
     }
 };
 
-checkDateFormat = date => {
+/**
+ * @param {String} authToken: Authorization token in base64==
+ */
+apiInterface.getOrderHistory = async (authToken) => {
+    try {
+        if (!authToken) {
+            throw new Error('No authToken provided');
+        }
+
+        const headers = { Authorization: `Basic ${authToken}` };
+        const options = { headers, json: true };
+
+        const response = await got.get(
+            `https://api.pactcoffee.com/v1/users/me/orders/?states[]=shipped&per_page=25&page=1&sort=dispatch_on&order=desc`,
+            options
+        );
+
+        if (response.statusCode === 200) {
+            return {
+                orders: response.body['orders'],
+                items: response.body['items'],
+            };
+        } else {
+            throw new Error("Unable to get user' order history");
+        }
+    } catch (e) {
+        if (e instanceof got) {
+            throw new Error('Error resolving HTTP request');
+        }
+        throw e;
+    }
+};
+
+checkDateFormat = (date) => {
     const regex = /\d{4}-\d{2}-\d{2}/g;
     return regex.test(date);
 };
 
-toBASE64 = str => {
+toBASE64 = (str) => {
     return Buffer.from(str).toString('base64') + '==';
 };
