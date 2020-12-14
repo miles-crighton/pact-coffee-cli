@@ -52,7 +52,7 @@ class CoffeeMaker {
             }
             this.orderID = this.userData['start']['order_ids'][0];
         } catch (e) {
-            console.log(chalk.red(e));
+            console.log(chalk.red(`Error getting user data: ${e}`));
         }
     };
 
@@ -70,7 +70,7 @@ class CoffeeMaker {
                 )
             );
         } catch (e) {
-            console.log(chalk.red(e));
+            console.log(chalk.red(`Error changing order date: ${e}`));
         }
     };
 
@@ -100,7 +100,7 @@ class CoffeeMaker {
                     'No user data found, try calling getUserData()'
                 );
             }
-            const coffeeName = this.userData.entities[0]['name'];
+            const coffeeName = this.userData.items[0]['product_name'];
             const dispatchDate = this.userData.orders[0]['dispatch_on'];
             console.log(
                 chalk.yellow('Your order of'),
@@ -109,7 +109,7 @@ class CoffeeMaker {
                 chalk.red(helpers.reverseDate(dispatchDate, '-', '/'))
             );
         } catch (e) {
-            console.log(chalk.red(e));
+            console.log(chalk.red(`Error displaying order status: ${e}`));
         }
     };
 
@@ -164,7 +164,7 @@ class CoffeeMaker {
                 }
             }
         } catch (e) {
-            console.log(chalk.red(e));
+            console.log(chalk.red(`Error displaying order history: ${e}`));
         }
     };
 
