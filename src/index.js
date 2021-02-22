@@ -18,6 +18,7 @@ exports.dispatchWhen = async function () {
     const CoffeeMakerInstance = new CoffeeMaker();
     await CoffeeMakerInstance.authenticate();
     await CoffeeMakerInstance.getUserData();
+    await CoffeeMakerInstance.displayLastDispatched();
     await CoffeeMakerInstance.displayOrderStatus();
     await CoffeeMakerInstance.cleanup();
 };
@@ -27,10 +28,12 @@ exports.main = async function main() {
         const CoffeeMakerInstance = new CoffeeMaker();
         await CoffeeMakerInstance.authenticate();
         await CoffeeMakerInstance.getUserData();
+        await CoffeeMakerInstance.displayLastDispatched();
         await CoffeeMakerInstance.displayOrderStatus();
 
         let answers;
         let running = true;
+        // Inquirer menu loop
         while (running) {
             answers = await inquirer.askOptions();
             switch (answers.optionSelection) {

@@ -1,27 +1,24 @@
 const helpers = require('./helpers');
 const chalk = require('chalk');
 const APIInterface = require('./pactAPIInterface');
-const inquirer = require('./inquirer');
-const fs = require('fs');
-const path = require('path');
-const envfile = require('envfile');
 const moment = require('moment');
-
+const auth = require('./auth');
 const CLI = require('clui');
 const Spinner = CLI.Spinner;
 
-//Classes are ES6, precompile or set prototypes.
+// Classes are ES6, precompile or set prototypes.
 class CoffeeMaker {
     constructor() {
-        this.authToken = undefined;
-        this.myCoffees = undefined;
-        this.userData = undefined;
-        this.orderID = undefined;
+        this.authToken;
+        this.myCoffees;
+        this.userData;
+        this.orderID;
+        this.orderHistory;
     }
 
     authenticate = async () => {
         try {
-            const credentials = await checkCredentials();
+            const credentials = await auth.getCredentials();
             const msg = 'Authenticating you, please wait... ☕';
 
             const authToken = await statusWrapper(
@@ -35,7 +32,13 @@ class CoffeeMaker {
             this.authToken = authToken;
             //console.log(chalk.green('Authentication successful.'));
         } catch (e) {
-            console.log(chalk.red(e));
+            console.log(
+                chalk.red(
+                    `We couldn't authenticate you with Pact's servers, try entering your credentials again below`
+                )
+            );
+            await auth.requestCredentials();
+            await this.authenticate();
         }
     };
 
@@ -113,16 +116,76 @@ class CoffeeMaker {
         }
     };
 
-    displayOrderHistory = async () => {
+    displayLastDispatched = async () => {
+        if (!this.orderHistory) await this.getOrderHistory();
+
+        const orderHistory = this.orderHistory;
+
+        if (orderHistory) {
+            let order = orderHistory['orders'][0];
+
+            let coffeeItem = orderHistory.items.filter(
+                (item) => item.id === order.item_ids[0]
+            );
+
+            if (coffeeItem) {
+                coffeeItem = coffeeItem[0];
+                const orderStatus = order['current_state'];
+
+                let outputStr = '';
+
+                const daysAgo = moment().diff(
+                    moment(order.dispatch_on, 'YYYY-MM-DD'),
+                    'days'
+                );
+
+                if (orderStatus === 'shipped') {
+                    outputStr += chalk.yellow(
+                        `Your last ${chalk.green(
+                            `dispatched`
+                        )} order was ${chalk.red(`${daysAgo} days ago`)}`
+                    );
+
+                    outputStr += chalk.white(
+                        ` (${moment(order.dispatch_on, 'YYYY-MM-DD').format(
+                            'Do MMM YYYY'
+                        )} - ${coffeeItem.product_name})`
+                    );
+                } else {
+                    outputStr += chalk.red(`Your last order failed to ship`);
+
+                    outputStr += chalk.white(
+                        ` (${moment(order.dispatch_on, 'YYYY-MM-DD').format(
+                            'Do MMM YYYY'
+                        )} - ${coffeeItem.product_name})`
+                    );
+                }
+
+                console.log(outputStr);
+            }
+        }
+    };
+
+    getOrderHistory = async () => {
         try {
             if (!this.authToken) {
                 throw new Error(
                     'No auth token found, try calling authenticate()'
                 );
             }
-            const orderHistory = await APIInterface.getOrderHistory(
+            this.orderHistory = await APIInterface.getOrderHistory(
                 this.authToken
             );
+        } catch (e) {
+            console.log(chalk.red(`Error getting order history: ${e}`));
+        }
+    };
+
+    displayOrderHistory = async () => {
+        try {
+            if (!this.orderHistory) await this.getOrderHistory();
+
+            let orderHistory = this.orderHistory;
 
             if (orderHistory) {
                 let slicedOrderHistory = orderHistory['orders'];
@@ -193,36 +256,12 @@ const generateRatedCoffees = (coffees) => {
     return coffeeRatings;
 };
 
-checkCredentials = async () => {
-    let credentials = {
-        email: process.env.CREDS_EMAIL,
-        password: process.env.CREDS_PASSWORD,
-    };
-    if (!credentials.email || !credentials.password) {
-        credentials = await inquirer.askPactCredentials();
-        writeEnvFile(credentials.email, credentials.password);
-    }
-    return credentials;
-};
-
 statusWrapper = async (msg = 'Loading, please wait...', func, ...args) => {
     const status = new Spinner(msg);
     status.start();
     const response = await func(...args);
     status.stop();
     return response;
-};
-
-writeEnvFile = (email, password) => {
-    parsedFile = { CREDS_EMAIL: email, CREDS_PASSWORD: password };
-    fs.writeFile(
-        path.join(__dirname, '..', '.env'),
-        envfile.stringifySync(parsedFile),
-        function (err) {
-            if (err) throw err;
-            console.log(chalk.green('Credentials saved successfully.'));
-        }
-    );
 };
 
 module.exports = CoffeeMaker;

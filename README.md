@@ -4,6 +4,13 @@
 
 Communicate with [Pact's](https://www.pactcoffee.com/) servers via the comfort of your own terminal. ☕
 
+**Featuring**
+
+-   Shorthand dispatch date requests with weekend handling 📦
+-   Saved & encrypted credentials in local .env for quick authentication 🔐
+-   Dispatch history to check in on last dispatched coffee ✔️
+-   View liked/disliked coffees 👍
+
 ## Usage
 
 Running `pact` without arguments will open the interactive CLI.
@@ -18,35 +25,43 @@ Use command arguments to quickly access features (eg `pact -d 3d`, dispatch coff
 
 -   `--next or -n` : Displays when coffee is next due to be dispatched
 
-## Install via npm
+## Install
 
-`npm i -g pact-coffee-cli` then use the command `pact`
+**NPM ⚙️**
 
-or try it out first with:
+`npm i -g pact-coffee-cli`
+
+**Yarn 🐈**
+
+`yarn global add pact-coffee-cli`
+
+Then use the command `pact`, you'll be prompted for your Pact email/password
+
+Alternatively, try it out first with:
 
 `npx pact-coffee-cli`
 
-## Install manually
+## Uninstall
 
-Clone the repository into a local directory:
+**NPM ⚙️**
 
-`git clone https://github.com/miles-crighton/pact-coffee-cli`
+`npm uninstall -g pact-coffee-cli`
 
-Install required npm packages:
+**Yarn 🐈**
 
-`npm install`
+`yarn global remove pact-coffee-cli`
 
-Run the script with:
+## Privacy & Security Notice
 
-`./src/cli.js`
+Once you've entered your Pact credentials they'll be encrypted using info from your system.
 
-### Optional: create bash alias (OSX/Unix Bash Users)
+The encrypted credentials will then be stored in an local .env file for future authentications.
 
-Run this command from the project directory:
+These credentials are the only data that persists through interaction with the CLI.
 
-`echo "alias pact='"$PWD"/src/cli.js'" >> ~/.bashrc`
+To check out what's going on see [`auth.js`]() and [`crypto.js`]().
 
-You should now be able to run the program simply using `pact`.
+**None of your information is sent anywhere other than Pact's API server and the Node CLI.**
 
 ## Disclaimer
 
