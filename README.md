@@ -1,15 +1,15 @@
 # Pact Coffee CLI
 
-![CLI screenshot](https://user-images.githubusercontent.com/39874506/92900128-52468580-f417-11ea-803c-958e123a921b.png?sanitize=true)
+![CLI screenshot](https://raw.githubusercontent.com/miles-crighton/pact-coffee-cli/master/screenshot.png)
 
 Communicate with [Pact's](https://www.pactcoffee.com/) servers via the comfort of your own terminal. ☕
 
 **Featuring**
 
--   Shorthand dispatch date requests with weekend handling 📦
--   Saved & encrypted credentials in local .env for quick authentication 🔐
--   Dispatch history to check in on last dispatched coffee ✔️
--   View liked/disliked coffees 👍
+- Shorthand dispatch date requests with weekend handling 📦
+- Saved & encrypted credentials in local .env for quick authentication 🔐
+- Dispatch history to check in on last dispatched coffee ✔️
+- View liked/disliked coffees 👍
 
 ## Install
 
@@ -35,11 +35,11 @@ Running `pact` without arguments will open the interactive CLI.
 
 Use command arguments to quickly access features (eg `pact -d 3d`, dispatch coffee 3 days from now)
 
--   `--date or -d "DATE-STRING"` : Change the dispatch date of your next order
+- `--date or -d "DATE-STRING"` : Change the dispatch date of your next order
 
-    -   Can use full date (DD-MM-YYY) or shorthand (4d/1w) representing days and weeks from the present date.
+  - Can use full date (DD-MM-YYY) or shorthand (4d/1w) representing days and weeks from the present date.
 
--   `--next or -n` : Displays when coffee is next due to be dispatched
+- `--next or -n` : Displays when coffee is next due to be dispatched
 
 ## Uninstall
 
