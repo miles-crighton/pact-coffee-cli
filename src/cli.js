@@ -3,7 +3,7 @@ let argv = require('yargs')
     .option('date', {
         alias: 'd',
         type: 'string',
-        description: 'Change the date...',
+        description: "Change your coffee's dispatch date",
     })
     .option('next', {
         alias: 'n',
@@ -15,7 +15,7 @@ const pact = require('./index.js');
 
 if (argv.d) {
     pact.changeDate(argv.d);
-} else if (argv.w) {
+} else if (argv.n) {
     pact.dispatchWhen();
 } else {
     pact.main();
