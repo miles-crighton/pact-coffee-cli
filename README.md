@@ -1,6 +1,6 @@
 # Pact Coffee CLI
 
-![CLI screenshot](https://raw.githubusercontent.com/miles-crighton/pact-coffee-cli/master/screenshot.png)
+![CLI screenshot](https://user-images.githubusercontent.com/39874506/108716213-bc5d6d80-7513-11eb-9fc5-0cf8b269961c.png)
 
 Communicate with [Pact's](https://www.pactcoffee.com/) servers via the comfort of your own terminal. ☕
 
