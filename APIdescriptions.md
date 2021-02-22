@@ -18,7 +18,6 @@ returns:
 }
 
 THEN
-
 Uses token based authentication
 
 > > Returns JSON web token on credentials post
