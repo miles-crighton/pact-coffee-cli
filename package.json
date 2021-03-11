@@ -27,7 +27,9 @@
   "scripts": {
     "start": "node src/index.js",
     "cli": "node src/cli.js",
-    "test": "mocha"
+    "test": "mocha",
+    "prepare": "yarn test",
+    "pre-push": "yarn test"
   },
   "author": "Miles Crighton",
   "license": "ISC",

@@ -122,48 +122,52 @@ class CoffeeMaker {
 
     const orderHistory = this.orderHistory;
 
-    if (orderHistory) {
-      let order = orderHistory['orders'][0];
+    try {
+      if (orderHistory) {
+        let order = orderHistory['orders'][0];
 
-      let coffeeItem = orderHistory.items.filter(
-        (item) => item.id === order.item_ids[0]
-      );
-
-      if (coffeeItem) {
-        coffeeItem = coffeeItem[0];
-        const orderStatus = order['current_state'];
-
-        let outputStr = '';
-
-        const daysAgo = moment().diff(
-          moment(order.dispatch_on, 'YYYY-MM-DD'),
-          'days'
+        let coffeeItem = orderHistory.items.filter(
+          (item) => item.id === order.item_ids[0]
         );
 
-        if (orderStatus === 'shipped') {
-          outputStr += chalk.yellow(
-            `Your last ${chalk.green(`dispatched`)} order was ${chalk.red(
-              `${daysAgo} days ago`
-            )}`
+        if (coffeeItem) {
+          coffeeItem = coffeeItem[0];
+          const orderStatus = order['current_state'];
+
+          let outputStr = '';
+
+          const daysAgo = moment().diff(
+            moment(order.dispatch_on, 'YYYY-MM-DD'),
+            'days'
           );
 
-          outputStr += chalk.white(
-            ` (${moment(order.dispatch_on, 'YYYY-MM-DD').format(
-              'Do MMM YYYY'
-            )} - ${coffeeItem.product_name})`
-          );
-        } else {
-          outputStr += chalk.red(`Your last order failed to ship`);
+          if (orderStatus === 'shipped') {
+            outputStr += chalk.yellow(
+              `Your last ${chalk.green(`dispatched`)} order was ${chalk.red(
+                `${daysAgo} days ago`
+              )}`
+            );
 
-          outputStr += chalk.white(
-            ` (${moment(order.dispatch_on, 'YYYY-MM-DD').format(
-              'Do MMM YYYY'
-            )} - ${coffeeItem.product_name})`
-          );
+            outputStr += chalk.white(
+              ` (${moment(order.dispatch_on, 'YYYY-MM-DD').format(
+                'Do MMM YYYY'
+              )} - ${coffeeItem.product_name})`
+            );
+          } else {
+            outputStr += chalk.red(`Your last order failed to ship`);
+
+            outputStr += chalk.white(
+              ` (${moment(order.dispatch_on, 'YYYY-MM-DD').format(
+                'Do MMM YYYY'
+              )} - ${coffeeItem.product_name})`
+            );
+          }
+
+          console.log(outputStr);
         }
-
-        console.log(outputStr);
       }
+    } catch (e) {
+      console.log("Couldn't display last dispatched order");
     }
   };
 
