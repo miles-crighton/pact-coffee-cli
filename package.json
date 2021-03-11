@@ -1,7 +1,7 @@
 {
   "name": "pact-coffee-cli",
-  "version": "1.2.2",
-  "description": "A CLI for interacting with Pact coffee",
+  "version": "1.2.3",
+  "description": "A CLI for interacting with Pact coffee's API",
   "main": "src/index.js",
   "bin": {
     "pact": "./src/cli.js"
